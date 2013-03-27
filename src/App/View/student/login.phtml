@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>jQuery Mobile met PHP demo</title>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+<link href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" rel="stylesheet" type="text/css">
+<link href="<?=$this->path('assets/css/main.css') ?>" rel="stylesheet" type="text/css">
+</head>
+<body>
+<section data-role="page">
+    <header data-role="header" data-position="fixed">
+        <h1>jQuery Mobile met PHP demo</h1>
+        <a href="<?=$this->path() ?>" data-icon="home" data-iconpos="notext">Start</a>
+        <nav data-role="navbar">
+            <ul>
+                <li><a href="<?=$this->path('student/register') ?>">Registreren</a></li>
+                <li><a href="#" class="ui-btn-active ui-state-persist">Aanmelden</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div data-role="content">
+        <form id="form-login" name="form-login" method="post" action="" data-ajax="false">
+            <label for="email">E-mailadres</label>
+            <input id="email" name="email" type="email" data-mini="true" value="">
+
+            <label for="password">Wachtwoord</label>
+            <input id="password" name="password" type="password" data-mini="true" value="">
+
+            <input id="button-login" name="button-login" type="submit" value="Aanmelden" data-inline="true" data-theme="b">
+        </form>
+    </div>
+    <footer data-role="footer" data-position="fixed">
+        <p>Copyright © 2013 <a href="http://www.arteveldehs.be/">Artevelde University College Ghent</a></p>
+    </footer>
+</section>
+</body>
+</html>
