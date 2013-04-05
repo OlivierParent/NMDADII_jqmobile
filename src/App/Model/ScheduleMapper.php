@@ -43,7 +43,7 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
     public function create(Schedule $schedule)
     {
         // SQL-statement.
-        $sql = 'INSERT INTO `schedule` '
+        $sql = 'INSERT IGNORE INTO `schedule` '
              . '(`std_id`, `crs_id`, `tms_id`, `rom_id`) '
              . 'VALUES (:student, :course, :timeslot, :room)';
 
@@ -90,7 +90,7 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
         $sql = 'SELECT `std_id` AS `student`, `crs_id` AS `course`, `tms_id` AS `timeslot`, `rom_id` AS `room` '
              . 'FROM `schedule` NATURAL JOIN `timeslot` '
              . 'WHERE `tms_day` = :today AND `std_id` = :student '
-             . 'ORDER BY `start` ASC';
+             . 'ORDER BY `tms_start` ASC';
 
         $stmt = $this->db->prepare($sql);
         if ($stmt) {

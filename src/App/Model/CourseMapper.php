@@ -43,24 +43,28 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
      */
     public function createHasLecturer(Course $course, Lecturer $lecturer)
     {
-        // SQL-statement.
-        $sql = 'INSERT INTO `course_has_lecturer` '
-             . '(`crs_id`, `lec_id`) '
-             . 'VALUES (:course, :lecturer)';
+        if (!$this->readHasLecturer($course, $lecturer)) {
+            // SQL-statement.
+            $sql = 'INSERT IGNORE INTO `course_has_lecturer` '
+                 . '(`crs_id`, `lec_id`) '
+                 . 'VALUES (:course, :lecturer)';
 
-        // Als het prepared statement gelukt is:
-        $stmt = $this->db->prepare($sql);
-        if ($stmt) {
-            // Bind de waarden van de variabelen aan het prepared statement.
-            $stmt->bindValue(':course'  , $course  ->getId() ); // Waarde op dit moment binden.
-            $stmt->bindValue(':lecturer', $lecturer->getId() ); // Waarde op dit moment binden.
+            // Als het prepared statement gelukt is:
+            $stmt = $this->db->prepare($sql);
+            if ($stmt) {
+                // Bind de waarden van de variabelen aan het prepared statement.
+                $stmt->bindValue(':course'  , $course  ->getId() ); // Waarde op dit moment binden.
+                $stmt->bindValue(':lecturer', $lecturer->getId() ); // Waarde op dit moment binden.
 
-            if ($stmt->execute()) {
-                // Geeft de waarde terug van de AUTO_INCREMENT kolom van de laatst ingevoegde rij.
+                if ($stmt->execute()) {
+                    // Geeft de waarde terug van de AUTO_INCREMENT kolom van de laatst ingevoegde rij.
 
-                return $this->db->lastInsertId();
+                    return $this->db->lastInsertId();
+                }
+                throw new \Exception('Could not create `Course_has_Lecturer`');
             }
-            throw new \Exception('Could not create `Course_has_Lecturer`');
+        } else {
+            return null;
         }
         throw new \ErrorException('Unexpected error');
     }

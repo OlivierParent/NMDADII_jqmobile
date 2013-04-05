@@ -14,7 +14,7 @@
     <header data-role="header" data-position="fixed">
         <h1>jQuery Mobile met PHP demo</h1>
         <a href="<?=$this->path() ?>" data-icon="home" data-iconpos="notext">Start</a>
-        <nav data-role="navbar">
+        <nav data-role="navbar" class="ui-responsive">
             <ul>
                 <li><a href="<?=$this->path('calendar') ?>">Agenda</a></li>
                 <li><a href="#" class="ui-btn-active ui-state-persist">Opleidingsonderdeel toevoegen</a></li>
@@ -26,7 +26,7 @@
         <form id="form-schedule" name="form-schedule" action="" method="post" data-ajax="false">
             <label for="course" class="select">Opleidingsonderdeel</label>
             <select name="course" id="course" data-native-menu="false" data-icon="plus" data-iconpos="left">
-                <option>Kies een opleidingsonderdeel</option>
+                <option value="">Kies een opleidingsonderdeel</option>
 <?php foreach ($this->courses as $course): ?>
                 <option value="<?=$course->getId() ?>"><?=$course->getName() ?></option>
 <?php endforeach; ?>
@@ -34,15 +34,15 @@
 
             <label for="day" class="select">Dag</label>
             <select name="day" id="day" data-native-menu="false" data-icon="plus" data-iconpos="left">
-                <option>Kies een dag</option>
+                <option value="">Kies een dag</option>
 <?php foreach ($this->days as $day): ?>
                 <option value="<?=$day->getId() ?>"><?=ucfirst($day->getName()) ?></option>
 <?php endforeach; ?>
             </select>
 
-            <label for="timeslots" class="select">Lestijd</label>
-            <select name="timeslots[]" id="timeslots" multiple="multiple" data-native-menu="false" data-icon="grid" data-iconpos="left">
-                <option>Kies lestijden</option>
+            <label for="timeslots" class="select">Lestijden</label>
+            <select name="timeslots[]" id="timeslots" multiple="multiple" data-native-menu="false" data-icon="grid" data-iconpos="left" required="required">
+                <option value="">Kies lestijden</option>
                 <optgroup label="Ochtend">
 <?php foreach ($this->timeslots as $timeslot): ?>
 <?php   if ($timeslot->getStart() < '12:00') : ?>
@@ -67,15 +67,15 @@
             </select>
 
             <label for="room" class="select">Lokaal</label>
-            <select name="room" id="room" data-native-menu="false" data-icon="plus" data-iconpos="left">
-                <option>Kies een lokaal</option>
+            <select name="room" id="room" data-native-menu="false" data-icon="plus" data-iconpos="left"  required="required">
+                <option value="" disabled>Kies een lokaal</option>
 <?php foreach ($this->rooms as $room): ?>
                 <option value="<?=$room->getId() ?>"><?=$room->getName() ?></option>
 <?php endforeach; ?>
             </select>
 
-            <label for="lecturers" class="select">Docent</label>
-            <select name="lecturers[]" id="lecturer" multiple="multiple" data-native-menu="false" data-icon="plus" data-iconpos="left">
+            <label for="lecturers" class="select">Docenten</label>
+            <select name="lecturers[]" id="lecturers" multiple="multiple" data-native-menu="false" data-icon="plus" data-iconpos="left"  required="required">
                 <option>Kies docenten</option>
 <?php foreach ($this->lecturers as $lecturer): ?>
                 <option value="<?=$lecturer->getId() ?>"><?=$lecturer->getGivenname() ?> <?=$lecturer->getFamilyname() ?></option>
@@ -85,9 +85,7 @@
             <input type="submit" name="button-schedule" value="Opleidingsonderdeel opslaan" data-theme="b">
         </form>
     </div>
-    <footer data-role="footer" data-position="fixed">
-        <p>Copyright © 2013 <a href="http://www.arteveldehs.be/">Artevelde University College Ghent</a></p>
-    </footer>
+<?php $this->partial('footer'); ?>
 </section>
 </body>
 </html>

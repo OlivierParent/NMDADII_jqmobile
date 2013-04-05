@@ -14,7 +14,7 @@
     <header data-role="header" data-position="fixed">
         <h1>jQuery Mobile met PHP demo</h1>
         <a href="<?=$this->path() ?>" data-icon="home" data-iconpos="notext">Start</a>
-        <nav data-role="navbar">
+        <nav data-role="navbar" class="ui-responsive">
             <ul>
                 <li><a href="#" class="ui-btn-active ui-state-persist">Agenda</a></li>
                 <li><a href="<?=$this->path('calendar/add') ?>" data-ajax="false">Opleidingsonderdeel toevoegen</a></li>
@@ -36,9 +36,7 @@
 <?php endforeach ?>
         </ul>
     </div>
-    <footer data-role="footer" data-position="fixed">
-        <p>Copyright © 2013 <a href="http://www.arteveldehs.be/">Artevelde University College Ghent</a></p>
-    </footer>
+<?php $this->partial('footer'); ?>
 </section>
 </body>
 </html>

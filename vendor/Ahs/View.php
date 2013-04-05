@@ -41,7 +41,11 @@ class View
 
     public function __construct()
     {
-        $filename = PATH_SOURCE . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . Route::getController() . DIRECTORY_SEPARATOR . Route::getAction() . '.phtml';
+        $filename = PATH_SOURCE         . 'App'
+                  . DIRECTORY_SEPARATOR . 'View'
+                  . DIRECTORY_SEPARATOR . 'Scripts'
+                  . DIRECTORY_SEPARATOR . Route::getController()
+                  . DIRECTORY_SEPARATOR . Route::getAction() . '.phtml';
         if (file_exists($filename)) {
             $this->filename = $filename;
         } else {
@@ -57,5 +61,19 @@ class View
     public function path($url = '')
     {
         return PATH_WEBROOT . '/' . $url;
+    }
+
+    public function partial($partial_view)
+    {
+        $filename = PATH_SOURCE         . 'App'
+                  . DIRECTORY_SEPARATOR . 'View'
+                  . DIRECTORY_SEPARATOR . 'Partials'
+                  . DIRECTORY_SEPARATOR . $partial_view . '.phtml';
+        if (file_exists($filename)) {
+            include $filename;
+            echo PHP_EOL;
+        } else {
+            throw new \ErrorException("Cannot find file <strong>{$filename}</strong>");
+        }
     }
 }
