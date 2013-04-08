@@ -39,11 +39,30 @@ class Router
         $request = trim(str_replace(array('/' . 'index.php', PATH_WEBROOT), '', $_SERVER['REQUEST_URI'] ), '/');
         $request = explode('/', $request);
 
+        // Controllernaam
         if (isset($request[0])) {
             Route::setController($request[0]);
         }
+
+        // Actionnaam
         if (isset($request[1])) {
             Route::setAction($request[1]);
+        }
+
+        // Argumenten opslaan in array met key-valueparen
+        $count = count($request);
+        if (2 < $count) {
+            $args = [];
+            for ($i = 2; $i < $count; $i++) {
+				if ($i % 2  == 0) {
+					// Key
+					$args[$request[$i]] = null;
+				} else {
+					// Key => Value
+					$args[$request[$i - 1]] = $request[$i];
+				}
+			}
+            Route::setArgs($args);
         }
 
         $controllerClass   = '\\App\\Controller\\' . ucfirst(Route::getController()) . 'Controller';
