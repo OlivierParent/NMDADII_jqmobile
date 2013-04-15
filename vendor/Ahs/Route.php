@@ -74,9 +74,7 @@ class Route
      */
     static public function setAction($action)
     {
-        if (!empty($action)) {
-            self::$action = $action;
-        }
+        self::$action = empty($action) ? 'index' : $action;
     }
 
     /**
@@ -96,14 +94,13 @@ class Route
      */
     static public function setController($controller)
     {
-        if (!empty($controller)) {
-            self::$controller = $controller;
-        }
+        self::$controller = empty($controller) ? 'index' : $controller;
     }
 
     /**
+     * Haal de array met argumenten op.
      *
-     * @return type
+     * @return array
      */
     static public function getArgs()
     {
@@ -111,6 +108,7 @@ class Route
     }
 
     /**
+     * Zet de array van argumenten.
      *
      * @param array $args
      */

@@ -36,38 +36,43 @@ class Router
 {
     public function __construct()
     {
-        $request = trim(str_replace(array('/' . 'index.php', PATH_WEBROOT), '', $_SERVER['REQUEST_URI'] ), '/');
-        $request = explode('/', $request);
+        $request = str_replace(array(PATH_WEBROOT, '/index.php'), '', $_SERVER['REQUEST_URI']);
+        $request = trim($request, '/');
+        $route = explode('/', $request);
+
+        // Aantal items in de array $route tellen
+        $count = count($route);
 
         // Controllernaam
-        if (isset($request[0])) {
-            Route::setController($request[0]);
+        if (0 < $count) {
+            Route::setController($route[0]);
+
+            // Actionnaam
+            if (1 < $count) {
+                Route::setAction($route[1]);
+
+                // Argumenten opslaan in array met sleutel-waardeparen (key-value pairs)
+                if (2 < $count) {
+                    $args = [];
+                    for ($i = 2; $i < $count; $i++) {
+                        if ($i % 2 == 0) {
+                            // Sleutel
+                            $args[$route[$i]] = null;
+                        } else {
+                            // Sleutel => Waarde
+                            $args[$route[$i - 1]] = $route[$i];
+                        }
+                    }
+                    Route::setArgs($args);
+                }
+            }
         }
 
-        // Actionnaam
-        if (isset($request[1])) {
-            Route::setAction($request[1]);
-        }
-
-        // Argumenten opslaan in array met key-valueparen
-        $count = count($request);
-        if (2 < $count) {
-            $args = [];
-            for ($i = 2; $i < $count; $i++) {
-				if ($i % 2  == 0) {
-					// Key
-					$args[$request[$i]] = null;
-				} else {
-					// Key => Value
-					$args[$request[$i - 1]] = $request[$i];
-				}
-			}
-            Route::setArgs($args);
-        }
-
-        $controllerClass   = '\\App\\Controller\\' . ucfirst(Route::getController()) . 'Controller';
+        // Controllerklassenaam (met naamruimte) en Actionmethodenaam bepalen
+        $controllerClass  = '\\App\\Controller\\' . ucfirst(Route::getController()) . 'Controller';
         $controllerAction = Route::getAction() . 'Action';
 
+        // Controller instantiëren en Controller Action aanroepen
         $controller = new $controllerClass;
         $controller->$controllerAction();
     }
