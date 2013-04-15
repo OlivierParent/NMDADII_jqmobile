@@ -9,14 +9,14 @@ define('PATH_CONFIG' , PATH_SOURCE . 'config' . DIRECTORY_SEPARATOR);
 define('PATH_WEBROOT', dirname($_SERVER['SCRIPT_NAME']) );   // Pad vanaf de map waarin het project staat
 
 /**
- * Global functie Autoload om klassen in te laden.
+ * Eenvoudige Autoloader om klassen automatisch in te laden.
  *
  * @todo PSR-0 implementeren https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
  *
  * @param string $class
  * @throws \ErrorException
  */
-function __autoload($class)
+spl_autoload_register(function ($class)
 {
     $class_path = explode('\\', $class);
 
@@ -29,6 +29,6 @@ function __autoload($class)
     } else {
         throw new \ErrorException("Class <strong>{$class}</strong> does not exist.");
     }
-}
+});
 
 new \App\Application();
