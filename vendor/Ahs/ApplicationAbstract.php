@@ -34,7 +34,7 @@ namespace Ahs;
 
 abstract class ApplicationAbstract
 {
-    const VERSION = '0.1.0.20130211';
+    const VERSION = '0.1.0.20130415';
 
     public function __construct()
     {
