@@ -44,6 +44,9 @@ abstract class ControllerAbstract
         $this->session = new Session();
     }
 
+    /**
+     * Elke Controller moet de methode indexAction implementeren.
+     */
     abstract public function indexAction();
 
     /**
@@ -55,20 +58,20 @@ abstract class ControllerAbstract
     }
 
     /**
+     * Stuur de browser door naar een andere pagina.
      *
-     * @param type $path
+     * OPGELET: een redirect moet altijd gebeuren voordat er output verstuurd
+     * wordt. Als er output verstuurd wordt, dan wordt de HTTP-header reeds
+     * verstuurd.
+     *
+     * @param string $path
      */
     protected function redirect($path)
     {
         /**
-        * Stuur de browser door naar een andere pagina.
-        *
-        * @static
-        * @param string $path
-        */
-
-        // OPGELET: moet altijd voor de output - naar HTML bijv. - staan, want anders is er reeds een HTTP-header doorgestuurd.
-        // Zie: http://www.php.net/manual/en/function.header.php
-        @header('Location: ' . $path) && exit; // @ vangt de foutmelding 'headers already sent' op zodat de code niet stopt.
+         * De @ operator vangt een eventuele foutmelding 'headers already sent'
+         * op zodat de code niet stopt.
+         */
+        @header('Location: ' . $path) && exit;
     }
 }
