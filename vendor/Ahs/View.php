@@ -35,10 +35,32 @@ namespace Ahs;
 class View
 {
     /**
-     * @var string Bestandsnaam.
+     * Bestandsnaam van het View Script.
+     *
+     * @var string
      */
     protected $filename;
 
+    /**
+     * Scripts in de head van de pagina.
+     *
+     * @var array
+     */
+    protected $headScripts = [];
+
+    /**
+     * Stylesheet links in de head van de pagina.
+     *
+     * @var array
+     */
+    protected $headStylesheets = [];
+
+    /**
+     * Stel de naam van het View Script samen dat overeenkomt met de Controller
+     * en Controller Action-methode.
+     *
+     * @throws \ErrorException
+     */
     public function __construct()
     {
         $filename = PATH_SOURCE         . ApplicationAbstract::DIRECTORY_APP
@@ -53,16 +75,51 @@ class View
         }
     }
 
+    /**
+     * Render het View Script.
+     */
     public function __destruct()
     {
         require_once $this->filename;
     }
 
+    /**
+     * Voeg een script toe aan de head van de HTML-pagina.
+     *
+     * @param string $script
+     */
+    public function addHeadScript($script)
+    {
+        $this->headScripts[] = "    <script src=\"{$script}\"></script>" . PHP_EOL;
+    }
+
+    /**
+     * Voeg een stylesheet link toe aan de head van de HTML-pagina.
+     *
+     * @param string $stylesheet
+     */
+    public function addHeadStylesheet($stylesheet)
+    {
+        $this->headStylesheets[] = "    <link rel=\"stylesheet\" href=\"{$stylesheet}\">" . PHP_EOL;
+    }
+
+    /**
+     * Voegt het pad van de webroot toe aan een relatief pad.
+     *
+     * @param string $url
+     * @return string
+     */
     public function path($url = '')
     {
         return PATH_WEBROOT . '/' . $url;
     }
 
+    /**
+     * Render een Partial View Script.
+     *
+     * @param script $partial_view
+     * @throws \ErrorException
+     */
     public function partial($partial_view)
     {
         $filename = PATH_SOURCE         . ApplicationAbstract::DIRECTORY_APP
