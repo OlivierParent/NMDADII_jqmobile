@@ -36,6 +36,15 @@ abstract class ApplicationAbstract
 {
     const VERSION = '0.1.0.20130415';
 
+    const DIRECTORY_APP           = 'App';
+    const DIRECTORY_CONTROLLER    = 'Controller';
+    const DIRECTORY_MODEL         = 'Model';
+    const DIRECTORY_VIEW          = 'View';
+    const DIRECTORY_VIEW_PARTIALS = 'Partials';
+    const DIRECTORY_VIEW_SCRIPTS  = 'Scripts';
+    const FILE_EXTENSION_VIEW     = '.phtml';
+    const FILE_CONFIG_DATABASE    = 'database.ini';
+
     public function __construct()
     {
         return new Router();
