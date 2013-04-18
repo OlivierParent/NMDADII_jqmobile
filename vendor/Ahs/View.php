@@ -41,11 +41,11 @@ class View
 
     public function __construct()
     {
-        $filename = PATH_SOURCE         . 'App'
-                  . DIRECTORY_SEPARATOR . 'View'
-                  . DIRECTORY_SEPARATOR . 'Scripts'
+        $filename = PATH_SOURCE         . ApplicationAbstract::DIRECTORY_APP
+                  . DIRECTORY_SEPARATOR . ApplicationAbstract::DIRECTORY_VIEW
+                  . DIRECTORY_SEPARATOR . ApplicationAbstract::DIRECTORY_VIEW_SCRIPTS
                   . DIRECTORY_SEPARATOR . Route::getController()
-                  . DIRECTORY_SEPARATOR . Route::getAction() . '.phtml';
+                  . DIRECTORY_SEPARATOR . Route::getAction() . ApplicationAbstract::FILE_EXTENSION_VIEW;
         if (file_exists($filename)) {
             $this->filename = $filename;
         } else {
@@ -65,10 +65,10 @@ class View
 
     public function partial($partial_view)
     {
-        $filename = PATH_SOURCE         . 'App'
-                  . DIRECTORY_SEPARATOR . 'View'
-                  . DIRECTORY_SEPARATOR . 'Partials'
-                  . DIRECTORY_SEPARATOR . $partial_view . '.phtml';
+        $filename = PATH_SOURCE         . ApplicationAbstract::DIRECTORY_APP
+                  . DIRECTORY_SEPARATOR . ApplicationAbstract::DIRECTORY_VIEW
+                  . DIRECTORY_SEPARATOR . ApplicationAbstract::DIRECTORY_VIEW_PARTIALS
+                  . DIRECTORY_SEPARATOR . $partial_view . ApplicationAbstract::FILE_EXTENSION_VIEW;
         if (file_exists($filename)) {
             include $filename;
             echo PHP_EOL;
