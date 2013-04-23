@@ -30,62 +30,30 @@
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
  */
 
-namespace App\Controller;
+namespace Ahs;
 
-class CalendarController extends \Ahs\ControllerAbstract
+abstract class ControllerRestAbstract
 {
-    public function indexAction()
+    /**
+     * Elke Controller moet de methode indexAction implementeren.
+     */
+    abstract public function indexAction();
+
+    abstract public function getAction();
+
+    abstract public function headAction();
+
+    abstract public function deleteAction();
+
+    abstract public function postAction();
+
+    abstract public function putAction();
+
+    /**
+     * @return \Ahs\ViewRest
+     */
+    protected function getView()
     {
-        $student = $this->session->read('student');
-
-        $view = $this->getView();
-        $view->addHeadScript($view->path('assets/js/calendar/index.js'));
-        $view->student = $student;
-
-        $scheduleMapper = new \App\Model\ScheduleMapper();
-        $view->scheduleToday    = $scheduleMapper->readAllForStudentToday($student);
-        $view->scheduleThisWeek = $scheduleMapper->readAllForStudent($student);
-    }
-
-    public function addAction()
-    {
-        if (isset($_POST) && isset($_POST['button-schedule'])) {
-            $student = $this->session->read('student');
-
-            $scheduleMapper = new \App\Model\ScheduleMapper();
-            foreach ($_POST['timeslots'] as $timeslot) {
-                $schedule = new \App\Model\Schedule([
-                    'student'  => $student->getId(),
-                    'course'   => $_POST['course'],
-                    'timeslot' => $timeslot,
-                    'room'     => $_POST['room'],
-                ]);
-
-                $scheduleMapper->create($schedule);
-            }
-
-            $courseMapper = new \App\Model\CourseMapper();
-            foreach ($_POST['lecturers'] as $lecturer_id) {
-                $lecturer = new \App\Model\Lecturer(['id' => $lecturer_id]);
-                $courseMapper->createHasLecturer($schedule->getCourse(), $lecturer);
-            }
-
-            $this->redirect(PATH_WEBROOT . '/calendar');
-        }
-        $view = $this->getView();
-        $view->addHeadScript($view->path('assets/js/calendar/add.js') );
-
-        $courseMapper  = new \App\Model\CourseMapper();
-        $view->courses = $courseMapper->readAll();
-
-        $timeslotMapper  = new \App\Model\TimeslotMapper();
-        $view->timeslots = $timeslotMapper->readAll();
-        $view->days      = $timeslotMapper->readAllDays();
-
-        $roomMapper  = new \App\Model\RoomMapper();
-        $view->rooms = $roomMapper->readAll();
-
-        $lecturerMapper  = new \App\Model\LecturerMapper();
-        $view->lecturers = $lecturerMapper->readAll();
+        return new \Ahs\ViewRest();
     }
 }

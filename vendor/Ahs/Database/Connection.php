@@ -88,7 +88,7 @@ class Connection
      */
     protected static function createInstance()
     {
-        $filename = PATH_CONFIG . 'database.ini';
+        $filename = PATH_CONFIG . \Ahs\ApplicationAbstract::FILE_CONFIG_DATABASE;
         if (file_exists($filename)) {
             $config = parse_ini_file($filename); // Zie: http://php.net/manual/en/function.parse-ini-file.php
             // 'Data Source Name' samenstellen

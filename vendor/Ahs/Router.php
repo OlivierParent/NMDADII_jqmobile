@@ -34,22 +34,50 @@ namespace Ahs;
 
 class Router
 {
+    const NAME_SERVICE = 'service';
+
+    const NAME_SUFFIX_ACTION          = 'Action';
+    const NAME_SUFFIX_CONTROLLER      = 'Controller';
+    const NAME_SUFFIX_CONTROLLER_REST = 'ControllerRest';
+
+    /**
+     * Is de route een RESTful service of gewoon.
+     *
+     * @var bool
+     */
+    protected $isRESTful = false;
+
+    public static $e = null;
+
     public function __construct()
     {
-        $request = str_replace(array(PATH_WEBROOT, '/index.php'), '', $_SERVER['REQUEST_URI']);
+        $request = str_replace([PATH_WEBROOT, basename($_SERVER['SCRIPT_NAME'])], '', $_SERVER['REQUEST_URI']);
+        var_dump($request); echo '<br>';
         $request = trim($request, '/');
+        var_dump($request); echo '<br>';
         $route = explode('/', $request);
+        var_dump($route); echo '<br>'; exit;
 
         // Aantal items in de array $route tellen
         $count = count($route);
 
         // Controllernaam
         if (0 < $count) {
-            Route::setController($route[0]);
+            if ($route[0] == self::NAME_SERVICE) {
+                $this->isRESTful = true;
+            } else {
+                Route::setController($route[0]);
+            }
 
-            // Actionnaam
             if (1 < $count) {
-                Route::setAction($route[1]);
+                if ($this->isRESTful) {
+                    // Controllernaam en Actionnaam
+                    Route::setController($route[1]);
+                    Route::setActionRest();
+                } else {
+                    // Actionnaam
+                    Route::setAction($route[1]);
+                }
 
                 // Argumenten opslaan in array met sleutel-waardeparen (key-value pairs)
                 if (2 < $count) {
@@ -68,12 +96,39 @@ class Router
             }
         }
 
-        // Controllerklassenaam (met naamruimte) en Actionmethodenaam bepalen
-        $controllerClass  = '\\App\\Controller\\' . ucfirst(Route::getController()) . 'Controller';
-        $controllerAction = Route::getAction() . 'Action';
+        try {
+            $this->callControllerMethod();
+        } catch (\Exception $e) {
+            $this->callControllerMethodError($e);
+        }
+    }
 
-        // Controller instantiëren en Controller Action aanroepen
+    protected function callControllerMethod()
+    {
+        // Controllerklassenaam (met naamruimte) bepalen
+        $controllerClass = '\\' . ApplicationAbstract::DIRECTORY_APP
+                         . '\\' . ApplicationAbstract::DIRECTORY_CONTROLLER
+                         . '\\' . ucfirst(Route::getController())
+                         . ($this->isRESTful ? self::NAME_SUFFIX_CONTROLLER_REST : self::NAME_SUFFIX_CONTROLLER);
+        // Actionmethodenaam
+        $controllerMethod = Route::getAction() . self::NAME_SUFFIX_ACTION;
+
+        // Controller instantiëren en Controller Action-methode aanroepen
         $controller = new $controllerClass;
-        $controller->$controllerAction();
+        $controller->$controllerMethod();
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    protected function callControllerMethodError(\Exception $e)
+    {
+        self::$e = $e;
+        Route::setController('error');
+        if (!$this->isRESTful) {
+            Route::setAction();
+        }
+
+        $this->callControllerMethod();
     }
 }

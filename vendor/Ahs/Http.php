@@ -30,62 +30,96 @@
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
  */
 
-namespace App\Controller;
+namespace Ahs;
 
-class CalendarController extends \Ahs\ControllerAbstract
+class Http
 {
-    public function indexAction()
-    {
-        $student = $this->session->read('student');
 
-        $view = $this->getView();
-        $view->addHeadScript($view->path('assets/js/calendar/index.js'));
-        $view->student = $student;
+    /**
+     * Internet Media Type
+     */
 
-        $scheduleMapper = new \App\Model\ScheduleMapper();
-        $view->scheduleToday    = $scheduleMapper->readAllForStudentToday($student);
-        $view->scheduleThisWeek = $scheduleMapper->readAllForStudent($student);
-    }
+    /**
+     * JavaScript Object Notation
+     */
+    const CONTENT_TYPE_JSON = 'application/json';
 
-    public function addAction()
-    {
-        if (isset($_POST) && isset($_POST['button-schedule'])) {
-            $student = $this->session->read('student');
+    /**
+     * HyperText Markup Language
+     */
+    const CONTENT_TYPE_HTML = 'text/html';
 
-            $scheduleMapper = new \App\Model\ScheduleMapper();
-            foreach ($_POST['timeslots'] as $timeslot) {
-                $schedule = new \App\Model\Schedule([
-                    'student'  => $student->getId(),
-                    'course'   => $_POST['course'],
-                    'timeslot' => $timeslot,
-                    'room'     => $_POST['room'],
-                ]);
+    /**
+     * HTTP/1.1 Request Methods.
+     *
+     * http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
+     */
 
-                $scheduleMapper->create($schedule);
-            }
+    /**
+     * Verwijder resource.
+     *
+     * Responses: 200 met entity, 204 zonder entity, 202 nog niet verwerkt
+     */
+    const REQUEST_METHOD_DELETE = 'DELETE';
 
-            $courseMapper = new \App\Model\CourseMapper();
-            foreach ($_POST['lecturers'] as $lecturer_id) {
-                $lecturer = new \App\Model\Lecturer(['id' => $lecturer_id]);
-                $courseMapper->createHasLecturer($schedule->getCourse(), $lecturer);
-            }
+    /**
+     * Haal informatie op
+     *
+     * Responses: 200 met entity of 204 zonder entity
+     */
+    const REQUEST_METHOD_GET    = 'GET';
 
-            $this->redirect(PATH_WEBROOT . '/calendar');
-        }
-        $view = $this->getView();
-        $view->addHeadScript($view->path('assets/js/calendar/add.js') );
+    /**
+     * Is een GET zonder body, enkel de headerinformatie.
+     */
+    const REQUEST_METHOD_HEAD   = 'HEAD';
 
-        $courseMapper  = new \App\Model\CourseMapper();
-        $view->courses = $courseMapper->readAll();
+    /**
+     * Entity doorsturen naar de server. .
+     *
+     * Responses: 200, 204, of 201 indien er een nieuwe resource werd aangemaakt
+     * op basis van de doorgestuurde entity.
+     */
+    const REQUEST_METHOD_POST   = 'POST';
 
-        $timeslotMapper  = new \App\Model\TimeslotMapper();
-        $view->timeslots = $timeslotMapper->readAll();
-        $view->days      = $timeslotMapper->readAllDays();
+    /**
+     * Maak nieuwe of wijzig bestaande resource op basis van de meegestuurde
+     * entity.
+     *
+     * Responses: 200, 204, of 501 indien de content header niet begrepen wordt.
+     *
+     */
+    const REQUEST_METHOD_PUT    = 'PUT';
 
-        $roomMapper  = new \App\Model\RoomMapper();
-        $view->rooms = $roomMapper->readAll();
+    /**
+     * HTTP/1.1 Status Codes.
+     *
+     * http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+     */
 
-        $lecturerMapper  = new \App\Model\LecturerMapper();
-        $view->lecturers = $lecturerMapper->readAll();
-    }
+    /**
+     * Oké.
+     */
+    const STATUS_CODE_OK              = 200;
+
+    /**
+     * Nieuwe resource aangemaakt.
+     */
+    const STATUS_CODE_CREATED         = 201;
+
+    /**
+     * Geaccepteerd, maar nog niet verwerkt.
+     */
+    const STATUS_CODE_ACCEPTED        = 202;
+
+    /**
+     * Geen inhoud.
+     */
+    const STATUS_CODE_NO_CONTENT      = 204;
+
+    /**
+     * Niet geïmplementeerd.
+     */
+    const STATUS_CODE_NOT_IMPLEMENTED = 501;
+
 }

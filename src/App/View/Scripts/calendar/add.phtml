@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html lang="nl">
-<head>
-<meta charset="utf-8">
-<title>jQuery Mobile met PHP demo</title>
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
-<script src="<?=$this->path('assets/js/calendar.js') ?>"></script>
-<link href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" rel="stylesheet" type="text/css">
-<link href="<?=$this->path('assets/css/main.css') ?>" rel="stylesheet" type="text/css">
-</head>
+<?php $this->partial('head'); ?>
 <body>
 <section data-role="page">
     <header data-role="header" data-position="fixed">
-        <h1>jQuery Mobile met PHP demo</h1>
+        <h1>Lessenrooster (PHP+MySQL+jQM demo)</h1>
         <a href="<?=$this->path() ?>" data-icon="home" data-iconpos="notext">Start</a>
         <nav data-role="navbar" class="ui-responsive">
             <ul>
@@ -22,7 +14,7 @@
         </nav>
     </header>
     <div data-role="content">
-        <h1>Opleidingsonderdeel toevoegen</h1>
+        <h2>Opleidingsonderdeel toevoegen</h2>
         <form id="form-schedule" name="form-schedule" action="" method="post" data-ajax="false">
             <label for="course" class="select">Opleidingsonderdeel</label>
             <select name="course" id="course" data-native-menu="false" data-icon="plus" data-iconpos="left">
