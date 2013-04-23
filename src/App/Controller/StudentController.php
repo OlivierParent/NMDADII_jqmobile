@@ -36,12 +36,11 @@ class StudentController extends \Ahs\ControllerAbstract
 {
     public function indexAction()
     {
-        die(__METHOD__);
+        die(__METHOD__); // Toon de Controller Action-methode.
     }
 
     /**
-     *
-     * @return type
+     * @return mixed
      */
     public function loginAction()
     {
@@ -68,8 +67,7 @@ class StudentController extends \Ahs\ControllerAbstract
     }
 
     /**
-     *
-     * @return type
+     * @return mixed
      */
     public function registerAction()
     {
@@ -94,8 +92,7 @@ class StudentController extends \Ahs\ControllerAbstract
     }
 
     /**
-     *
-     * @return type
+     * @return mixed
      */
     public function logoutAction()
     {

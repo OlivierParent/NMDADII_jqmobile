@@ -87,20 +87,26 @@ class View
      * Voeg een script toe aan de head van de HTML-pagina.
      *
      * @param string $script
+     * @return \Ahs\View
      */
     public function addHeadScript($script)
     {
         $this->headScripts[] = "    <script src=\"{$script}\"></script>" . PHP_EOL;
+
+        return $this; // Maakt deze methode 'chainable'
     }
 
     /**
      * Voeg een stylesheet link toe aan de head van de HTML-pagina.
      *
      * @param string $stylesheet
+     * @return \Ahs\View
      */
     public function addHeadStylesheet($stylesheet)
     {
         $this->headStylesheets[] = "    <link rel=\"stylesheet\" href=\"{$stylesheet}\">" . PHP_EOL;
+
+        return $this; // Maakt deze methode 'chainable'
     }
 
     /**

@@ -35,13 +35,17 @@ namespace App\Model;
 class TimeslotMapper extends \Ahs\ModelMapperAbstract
 {
     /**
-     * @param \App\Model\Timeslot $timeslot
+     * @param  \App\Model\Timeslot $timeslot
      * @throws \Exception
      */
     public function read(Timeslot $timeslot)
     {
         // SQL-statement.
-        $sql = 'SELECT `tms_id` AS `id`, `tms_day` AS `day`, TIME_FORMAT(`tms_start`, \'%H:%i\') AS `start`, TIME_FORMAT(`tms_end`, \'%H:%i\') AS `end` '
+        $sql = 'SELECT '
+             . '`tms_id`                            AS `id`, '
+             . '`tms_day`                           AS `day`, '
+             . 'TIME_FORMAT(`tms_start`, \'%H:%i\') AS `start`, '
+             . 'TIME_FORMAT(`tms_end`  , \'%H:%i\') AS `end` '
              . 'FROM `timeslot` '
              . 'WHERE `tms_id` = :id '
              . 'LIMIT 1';
@@ -52,7 +56,7 @@ class TimeslotMapper extends \Ahs\ModelMapperAbstract
             $stmt->bindValue(':id', $timeslot->getId() ); // Waarde op dit moment binden.
 
             // Voer het prepared statement uit.
-            if ($stmt->execute()) {
+            if ($stmt->execute() ) {
                 $row = $stmt->fetch();
 
                 return new Timeslot($row);
@@ -68,14 +72,18 @@ class TimeslotMapper extends \Ahs\ModelMapperAbstract
     public function readAll()
     {
         // SQL-statement.
-        $sql = 'SELECT `tms_id` AS `id`, `tms_day` AS `day`, TIME_FORMAT(`tms_start`, \'%H:%i\') AS `start`, TIME_FORMAT(`tms_end`, \'%H:%i\') AS `end` '
+        $sql = 'SELECT '
+             . '`tms_id`                            AS `id`, '
+             . '`tms_day`                           AS `day`, '
+             . 'TIME_FORMAT(`tms_start`, \'%H:%i\') AS `start`, '
+             . 'TIME_FORMAT(`tms_end`  , \'%H:%i\') AS `end` '
              . 'FROM `timeslot` '
              . 'ORDER BY `day` ASC, `start` ASC';
 
         $timeslots = [];
 
         $res = $this->db->query($sql);
-        while ($row = $res->fetch()) {
+        while ($row = $res->fetch() ) {
             $timeslots[] = new Timeslot($row);
         }
 
@@ -88,13 +96,13 @@ class TimeslotMapper extends \Ahs\ModelMapperAbstract
     public function readAllDays()
     {
         // SQL-statement.
-        $sql = 'SELECT DISTINCT `tms_day` as `name` '
+        $sql = 'SELECT DISTINCT `tms_day` AS `name` '
              . 'FROM `timeslot` '
-             . 'ORDER BY `tms_day` ASC';
+             . 'ORDER BY `name` ASC';
 
         $res = $this->db->query($sql);
         $days = [];
-        if ($res_days = $res->fetchAll()) {
+        if ($res_days = $res->fetchAll() ) {
             foreach ($res_days as $res_day) {
                 $days[] = new Day($res_day);
             }

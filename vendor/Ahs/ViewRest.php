@@ -30,118 +30,95 @@
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
  */
 
-namespace App\Model;
+namespace Ahs;
 
-class Course extends \Ahs\ModelAbstract
+class ViewRest
 {
     /**
-     * Opleidingsonderdeel Id
-     *
      * @var int
      */
-    protected $id;
+    protected $responseCode = http::STATUS_CODE_OK;
 
     /**
-     * Naam
-     *
      * @var string
      */
-    protected $name;
+    protected $contentType = http::CONTENT_TYPE_HTML;
 
     /**
-     * Docenten
-     *
-     * @var array
+     * @var mixed
      */
-    protected $lecturers = [];
+    protected $body = null;
 
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
+    public function __destruct()
     {
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'id':
-                    $this->setId($value);
-                    break;
-                case 'name':
-                    $this->setName($value);
-                    break;
-                default:
-                    break;
-            }
+        http_response_code($this->responseCode);
+        header("Content-Type: {$this->contentType}");
+        switch ($this->contentType) {
+            case http::CONTENT_TYPE_JSON:
+                echo json_encode($this->body);
+                break;
+            default:
+                if ($this->body) {
+                    echo $this->body;
+                }
+                break;
+        }
+    }
+
+    /**
+     * Zet HTTP Response Status Code.
+     *
+     * @param int $responseCode
+     * @return \Ahs\ViewRest
+     */
+    public function setResponseCode($responseCode)
+    {
+        switch ($responseCode) {
+            case Http::STATUS_CODE_OK:
+            case Http::STATUS_CODE_CREATED:
+            case Http::STATUS_CODE_ACCEPTED:
+            case Http::STATUS_CODE_NO_CONTENT:
+            case Http::STATUS_CODE_NOT_IMPLEMENTED:
+                $this->responseCode = $responseCode;
+                break;
+            default:
+                $this->responseCode = Http::STATUS_CODE_OK;
+                break;
         }
 
-        $lectureMapper = new LecturerMapper();
-        $this->lecturers = $lectureMapper->readAllForCourse($this);
+        return $this; // Maakt deze methode 'chainable'
     }
 
     /**
-     * Getter voor Opleidingsonderdeel Id
+     * Zet HTTP Content-Type.
      *
-     * @return int
+     * @param string $contentType
+     * @return \Ahs\ViewRest
      */
-    public function getId()
+    public function setContentType($contentType)
     {
-        return $this->id;
+        switch ($contentType) {
+            case Http::CONTENT_TYPE_JSON:
+                $this->contentType = $contentType;
+                break;
+            default:
+                $this->contentType = Http::CONTENT_TYPE_HTML;
+                break;
+        }
+
+        return $this; // Maakt deze methode 'chainable'
     }
 
     /**
-     * Setter voor Opleidingsonderdeel Id
+     * Zet de body content.
      *
-     * @param int $id
+     * @param mixed $body
+     * @return \Ahs\ViewRest
      */
-    public function setId($id)
+    public function setBody($body = null)
     {
-        $this->id = $id;
-    }
+        $this->body = $body;
 
-    /**
-     * Getter voor Naam
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Setter voor Naam
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-
-    /**
-     * Getter voor Docenten
-     *
-     * @return array
-     */
-    public function getLecturers()
-    {
-        return $this->lecturers;
-    }
-
-    /**
-     *
-     * @param \App\Model\Lecturer $lecturer
-     */
-    public function addLecturer(Lecturer $lecturer)
-    {
-        $this->lecturers[] = $lecturer;
-    }
-
-    public function toArray()
-    {
-        return [
-          'id'   => $this->getId(),
-          'name' => $this->getName(),
-        ];
+        return $this; // Maakt deze methode 'chainable'
     }
 }

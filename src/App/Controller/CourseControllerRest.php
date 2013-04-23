@@ -30,118 +30,62 @@
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
  */
 
-namespace App\Model;
+namespace App\Controller;
 
-class Course extends \Ahs\ModelAbstract
+class CourseControllerRest extends \Ahs\ControllerRestAbstract
 {
-    /**
-     * Opleidingsonderdeel Id
-     *
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * Naam
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Docenten
-     *
-     * @var array
-     */
-    protected $lecturers = [];
-
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
+    public function indexAction()
     {
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'id':
-                    $this->setId($value);
-                    break;
-                case 'name':
-                    $this->setName($value);
-                    break;
-                default:
-                    break;
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+             ->setBody(__METHOD__);
+    }
+
+    public function deleteAction()
+    {
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+             ->setBody(__METHOD__);
+    }
+
+    public function getAction()
+    {
+        $args = \Ahs\Route::getArgs();
+        $name = isset($args['name']) ? $args['name'] : '';
+        $courseMapper = new \App\Model\CourseMapper();
+        $courses = $courseMapper->readAllLike($name);
+
+        $view = $this->getView();
+        if (empty($courses)) {
+            $view->setResponseCode(\Ahs\Http::STATUS_CODE_NO_CONTENT);
+        } else {
+            foreach ($courses as $key => $course) {
+                $courses[$key] = $course->toArray();
             }
+            $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+                 ->setContentType(\Ahs\Http::CONTENT_TYPE_JSON)
+                 ->setBody($courses);
         }
-
-        $lectureMapper = new LecturerMapper();
-        $this->lecturers = $lectureMapper->readAllForCourse($this);
     }
 
-    /**
-     * Getter voor Opleidingsonderdeel Id
-     *
-     * @return int
-     */
-    public function getId()
+    public function headAction()
     {
-        return $this->id;
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NO_CONTENT)
+             ->setBody(__METHOD__);
     }
 
-    /**
-     * Setter voor Opleidingsonderdeel Id
-     *
-     * @param int $id
-     */
-    public function setId($id)
+    public function postAction()
     {
-        $this->id = $id;
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+             ->setBody(__METHOD__);
     }
 
-    /**
-     * Getter voor Naam
-     *
-     * @return string
-     */
-    public function getName()
+    public function putAction()
     {
-        return $this->name;
-    }
-
-    /**
-     * Setter voor Naam
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-
-    /**
-     * Getter voor Docenten
-     *
-     * @return array
-     */
-    public function getLecturers()
-    {
-        return $this->lecturers;
-    }
-
-    /**
-     *
-     * @param \App\Model\Lecturer $lecturer
-     */
-    public function addLecturer(Lecturer $lecturer)
-    {
-        $this->lecturers[] = $lecturer;
-    }
-
-    public function toArray()
-    {
-        return [
-          'id'   => $this->getId(),
-          'name' => $this->getName(),
-        ];
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+             ->setBody(__METHOD__);
     }
 }

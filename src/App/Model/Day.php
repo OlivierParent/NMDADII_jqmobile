@@ -34,6 +34,30 @@ namespace App\Model;
 
 class Day extends \Ahs\ModelAbstract
 {
+    const MON = 'MON';
+    const TUE = 'TUE';
+    const WED = 'WED';
+    const THU = 'THU';
+    const FRI = 'FRI';
+
+    public static $week = [
+        1 => self::MON,
+        2 => self::TUE,
+        3 => self::WED,
+        4 => self::THU,
+        5 => self::FRI,
+        6 => self::MON, // Dagen in het weekend worden automatisch 'maandag'.
+        7 => self::MON,
+    ];
+
+    public static $days = [
+        self::MON => 'maandag',
+        self::TUE => 'dinsdag',
+        self::WED => 'woensdag',
+        self::THU => 'donderdag',
+        self::FRI => 'vrijdag',
+    ];
+
     /**
      * Opleidingsonderdeel Id
      *
@@ -102,14 +126,6 @@ class Day extends \Ahs\ModelAbstract
      */
     public function setName($name)
     {
-        $days = [
-            'MON' => 'maandag',
-            'TUE' => 'dinsdag',
-            'WED' => 'woensdag',
-            'THU' => 'donderdag',
-            'FRI' => 'vrijdag',
-        ];
-
-        $this->name = $days[$name];
+        $this->name = self::$days[$name];
     }
 }

@@ -30,118 +30,53 @@
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
  */
 
-namespace App\Model;
+namespace App\Controller;
 
-class Course extends \Ahs\ModelAbstract
+class ScheduleControllerRest extends \Ahs\ControllerRestAbstract
 {
-    /**
-     * Opleidingsonderdeel Id
-     *
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * Naam
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Docenten
-     *
-     * @var array
-     */
-    protected $lecturers = [];
-
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
+    public function indexAction()
     {
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'id':
-                    $this->setId($value);
-                    break;
-                case 'name':
-                    $this->setName($value);
-                    break;
-                default:
-                    break;
-            }
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+             ->setBody(__METHOD__);
+    }
+
+    public function deleteAction()
+    {
+        $data = \Ahs\Route::getArgs();
+        $schedule = new \App\Model\Schedule($data);
+        $scheduleMapper = new \App\Model\ScheduleMapper();
+        $result = $scheduleMapper->delete($schedule);
+        if ($result) {
+            $view = $this->getView();
+            $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK);
         }
-
-        $lectureMapper = new LecturerMapper();
-        $this->lecturers = $lectureMapper->readAllForCourse($this);
     }
 
-    /**
-     * Getter voor Opleidingsonderdeel Id
-     *
-     * @return int
-     */
-    public function getId()
+    public function getAction()
     {
-        return $this->id;
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+             ->setBody(__METHOD__);
     }
 
-    /**
-     * Setter voor Opleidingsonderdeel Id
-     *
-     * @param int $id
-     */
-    public function setId($id)
+    public function headAction()
     {
-        $this->id = $id;
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NO_CONTENT);
     }
 
-    /**
-     * Getter voor Naam
-     *
-     * @return string
-     */
-    public function getName()
+    public function postAction()
     {
-        return $this->name;
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+             ->setBody(__METHOD__);
     }
 
-    /**
-     * Setter voor Naam
-     *
-     * @param string $name
-     */
-    public function setName($name)
+    public function putAction()
     {
-        $this->name = $name;
-    }
-
-
-    /**
-     * Getter voor Docenten
-     *
-     * @return array
-     */
-    public function getLecturers()
-    {
-        return $this->lecturers;
-    }
-
-    /**
-     *
-     * @param \App\Model\Lecturer $lecturer
-     */
-    public function addLecturer(Lecturer $lecturer)
-    {
-        $this->lecturers[] = $lecturer;
-    }
-
-    public function toArray()
-    {
-        return [
-          'id'   => $this->getId(),
-          'name' => $this->getName(),
-        ];
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+             ->setBody(__METHOD__);
     }
 }

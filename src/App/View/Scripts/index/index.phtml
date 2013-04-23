@@ -4,7 +4,7 @@
 <body>
 <section data-role="page">
     <header data-role="header" data-position="fixed">
-        <h1>jQuery Mobile met PHP demo</h1>
+        <h1>Lessenrooster (PHP+MySQL+jQM demo)</h1>
         <nav data-role="navbar" class="ui-responsive">
             <ul>
 <?php if ($this->hasIdentity): ?>
@@ -18,7 +18,7 @@
         </nav>
     </header>
     <div data-role="content">
-        <h2><img src="<?=$this->path('assets/img/logo_EN.png') ?>" alt="Artevelde University College Ghent"></h2>
+        <h2><img id="ahs-logo" src="<?=$this->path('assets/img/logo_EN.png') ?>" alt="Artevelde University College Ghent"></h2>
     </div>
 <?php $this->partial('footer'); ?>
 </section>

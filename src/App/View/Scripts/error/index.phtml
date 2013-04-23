@@ -4,11 +4,12 @@
 <body>
 <section data-role="page">
     <header data-role="header" data-position="fixed">
-        <h1>jQuery Mobile met PHP demo</h1>
+        <a href="<?=$this->path() ?>" data-icon="home" data-iconpos="notext">Start</a>
+        <h1>Lessenrooster (PHP+MySQL+jQM demo)</h1>
     </header>
     <div data-role="content">
-        <h2>An error occured</h2>
-        <pre><?=$error ?></pre>
+        <h2>Er is een fout gebeurd</h2>
+        <pre><?php var_dump($this->exception) ?></pre>
     </div>
 <?php $this->partial('footer'); ?>
 </section>

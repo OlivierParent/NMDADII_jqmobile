@@ -30,118 +30,51 @@
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
  */
 
-namespace App\Model;
+namespace App\Controller;
 
-class Course extends \Ahs\ModelAbstract
+class ErrorControllerRest extends \Ahs\ControllerRestAbstract
 {
-    /**
-     * Opleidingsonderdeel Id
-     *
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * Naam
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Docenten
-     *
-     * @var array
-     */
-    protected $lecturers = [];
-
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
+    public function indexAction()
     {
-        foreach ($data as $key => $value) {
-            switch ($key) {
-                case 'id':
-                    $this->setId($value);
-                    break;
-                case 'name':
-                    $this->setName($value);
-                    break;
-                default:
-                    break;
-            }
-        }
+        $this->exception();
+    }
 
-        $lectureMapper = new LecturerMapper();
-        $this->lecturers = $lectureMapper->readAllForCourse($this);
+    public function getAction()
+    {
+        $this->exception();
+    }
+
+    public function headAction()
+    {
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NOT_IMPLEMENTED);
+    }
+
+    public function deleteAction()
+    {
+        $this->exception();
+    }
+
+    public function postAction()
+    {
+        $this->exception();
+    }
+
+    public function putAction()
+    {
+        $this->exception();
     }
 
     /**
-     * Getter voor Opleidingsonderdeel Id
-     *
-     * @return int
+     * Exception Message
      */
-    public function getId()
+    public function exception()
     {
-        return $this->id;
-    }
+        $body = ['error' => \Ahs\Router::$e];
 
-    /**
-     * Setter voor Opleidingsonderdeel Id
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Getter voor Naam
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Setter voor Naam
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-
-    /**
-     * Getter voor Docenten
-     *
-     * @return array
-     */
-    public function getLecturers()
-    {
-        return $this->lecturers;
-    }
-
-    /**
-     *
-     * @param \App\Model\Lecturer $lecturer
-     */
-    public function addLecturer(Lecturer $lecturer)
-    {
-        $this->lecturers[] = $lecturer;
-    }
-
-    public function toArray()
-    {
-        return [
-          'id'   => $this->getId(),
-          'name' => $this->getName(),
-        ];
+        $view = $this->getView();
+        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NOT_IMPLEMENTED)
+             ->setContentType( \Ahs\Http::CONTENT_TYPE_JSON)
+             ->setBody($body);
     }
 }

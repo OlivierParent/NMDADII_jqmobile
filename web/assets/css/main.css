@@ -12,3 +12,13 @@ footer a:hover {
 pre {
     color: #F00;
 }
+#ahs-logo {
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px #999;
+    max-width: 100%;
+}
+
+/* jQuery Mobile override */
+.ui-li-count {
+    text-align: center;
+}

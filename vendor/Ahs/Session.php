@@ -36,7 +36,6 @@ class Session
 {
     public function __construct($name = 'Ahs')
     {
-        //session_name($name . 'Session');
         session_start();
     }
 

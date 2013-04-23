@@ -35,8 +35,8 @@ namespace App\Model;
 class CourseMapper extends \Ahs\ModelMapperAbstract
 {
     /**
-     * @param \App\Model\Course $course
-     * @param \App\Model\Lecturer $lecturer
+     * @param  \App\Model\Course $course
+     * @param  \App\Model\Lecturer $lecturer
      * @return string
      * @throws \Exception
      * @throws \ErrorException
@@ -45,8 +45,8 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
     {
         // SQL-statement.
         $sql = 'INSERT IGNORE INTO `course_has_lecturer` '
-             . '(`crs_id`, `lec_id`) '
-             . 'VALUES (:course, :lecturer)';
+             . '       (`crs_id`, `lec_id` ) '
+             . 'VALUES (:course , :lecturer)';
 
         // Als het prepared statement gelukt is:
         $stmt = $this->db->prepare($sql);
@@ -55,24 +55,26 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
             $stmt->bindValue(':course'  , $course  ->getId() ); // Waarde op dit moment binden.
             $stmt->bindValue(':lecturer', $lecturer->getId() ); // Waarde op dit moment binden.
 
-            if ($stmt->execute()) {
+            if ($stmt->execute() ) {
                 // Geeft de waarde terug van de AUTO_INCREMENT kolom van de laatst ingevoegde rij.
 
                 return $this->db->lastInsertId();
             }
-            throw new \Exception('Could not create `Course_has_Lecturer`');
+            throw new \Exception('Could not create `course_has_lecturer`');
         }
         throw new \ErrorException('Unexpected error');
     }
 
     /**
-     * @param \App\Model\Course $course
+     * @param  \App\Model\Course $course
      * @throws \Exception
      */
     public function read(Course $course)
     {
         // SQL-statement.
-        $sql = 'SELECT `crs_id` AS `id`, `crs_name` AS `name` '
+        $sql = 'SELECT '
+             . '`crs_id`   AS `id`, '
+             . '`crs_name` AS `name` '
              . 'FROM `course` '
              . 'WHERE `crs_id` = :id '
              . 'LIMIT 1';
@@ -83,12 +85,12 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
             $stmt->bindValue(':id', $course->getId() ); // Waarde op dit moment binden.
 
             // Voer het prepared statement uit.
-            if ($stmt->execute()) {
+            if ($stmt->execute() ) {
                 $row = $stmt->fetch();
 
                 return new Course($row);
             }
-            throw new \Exception('Could not read `Course`');
+            throw new \Exception('Could not read `course`');
         }
     }
 
@@ -98,9 +100,11 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
     public function readAll()
     {
         // SQL-statement.
-        $sql = 'SELECT `crs_id` AS `id`, `crs_name` AS `name` '
+        $sql = 'SELECT '
+             . '`crs_id`   AS `id`, '
+             . '`crs_name` AS `name` '
              . 'FROM `course` '
-             . 'ORDER BY name ASC';
+             . 'ORDER BY `name` ASC';
 
         $courses = [];
 
@@ -110,5 +114,38 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
         }
 
         return $courses;
+    }
+
+    /**
+     * URL: /web/service/course/name/...
+     *
+     * @param string $name Naam van het opleidingsonderdeel
+     * @return array \App\Model\Course
+     */
+    public function readAllLike($name)
+    {
+        // SQL-statement.
+        $sql = 'SELECT '
+             . '`crs_id`   AS `id`, '
+             . '`crs_name` AS `name` '
+             . 'FROM `course` '
+             . 'WHERE `crs_name` LIKE :name '
+             . 'ORDER BY `name` ASC';
+
+        $stmt = $this->db->prepare($sql);
+        if ($stmt) {
+            $stmt->bindParam(':name', $name); // Variabele binden.
+
+            $name = "%{$name}%";
+
+            $courses = [];
+            if ($stmt->execute() ) {
+                while($row = $stmt->fetch() ) {
+                    $courses[] = new Course($row);
+                }
+            }
+
+            return $courses;
+        }
     }
 }

@@ -35,16 +35,18 @@ namespace App\Model;
 class RoomMapper extends \Ahs\ModelMapperAbstract
 {
     /**
-     * @param \App\Model\Room $room
+     * @param  \App\Model\Room $room
      * @throws \Exception
      */
     public function read(Room $room)
     {
         // SQL-statement.
-        $sql = 'SELECT `rom_id` AS `id`, `rom_name` AS `name` '
+        $sql = 'SELECT '
+             . '`rom_id`   AS `id`, '
+             . '`rom_name` AS `name` '
              . 'FROM `room` NATURAL JOIN `campus` '
              . 'WHERE `rom_id` = :id '
-             . 'ORDER BY `cam_name`, `rom_name` '
+             . 'ORDER BY `cam_name` ASC, `rom_name` ASC '
              . 'LIMIT 1';
 
         $stmt = $this->db->prepare($sql);
@@ -53,12 +55,12 @@ class RoomMapper extends \Ahs\ModelMapperAbstract
             $stmt->bindValue(':id', $room->getId() ); // Waarde op dit moment binden.
 
             // Voer het prepared statement uit.
-            if ($stmt->execute()) {
+            if ($stmt->execute() ) {
                 $row = $stmt->fetch();
 
                 return new Room($row);
             }
-            throw new \Exception('Could not read `Room`');
+            throw new \Exception('Could not read `room`');
         }
     }
 
@@ -68,14 +70,16 @@ class RoomMapper extends \Ahs\ModelMapperAbstract
     public function readAll()
     {
         // SQL-statement.
-        $sql = 'SELECT `rom_id` AS `id`, `rom_name` AS `name` '
+        $sql = 'SELECT '
+             . '`rom_id`   AS `id`, '
+             . '`rom_name` AS `name` '
              . 'FROM `room` NATURAL JOIN `campus` '
-             . 'ORDER BY `cam_name`, `rom_name`';
+             . 'ORDER BY `cam_name` ASC, `rom_name` ASC';
 
         $rooms = [];
 
         $res = $this->db->query($sql);
-        while ($row = $res->fetch()) {
+        while ($row = $res->fetch() ) {
             $rooms[] = new Room($row);
         }
 

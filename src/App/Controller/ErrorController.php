@@ -36,6 +36,7 @@ class ErrorController extends \Ahs\ControllerAbstract
 {
     public function indexAction()
     {
-        die(__METHOD__);
+        $view = $this->getView();
+        $view->exception = \Ahs\Router::$e;
     }
 }

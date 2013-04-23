@@ -44,16 +44,16 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
     {
         // SQL-statement.
         $sql = 'INSERT IGNORE INTO `schedule` '
-             . '(`std_id`, `crs_id`, `tms_id`, `rom_id`) '
-             . 'VALUES (:student, :course, :timeslot, :room)';
+             . '       (`std_id`, `tms_id` , `crs_id`, `rom_id`) '
+             . 'VALUES (:student, :timeslot, :course , :room   )';
 
         // Als het prepared statement gelukt is:
         $stmt = $this->db->prepare($sql);
         if ($stmt) {
             // Bind de waarden van de variabelen aan het prepared statement.
             $stmt->bindValue(':student' , $schedule->getStudent() ->getId() ); // Waarde op dit moment binden.
-            $stmt->bindValue(':course'  , $schedule->getCourse()  ->getId() ); // Waarde op dit moment binden.
             $stmt->bindValue(':timeslot', $schedule->getTimeslot()->getId() ); // Waarde op dit moment binden.
+            $stmt->bindValue(':course'  , $schedule->getCourse()  ->getId() ); // Waarde op dit moment binden.
             $stmt->bindValue(':room'    , $schedule->getRoom()    ->getId() ); // Waarde op dit moment binden.
 
             // Voer het prepared statement uit.
@@ -68,10 +68,17 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
         throw new \ErrorException('Unexpected error');
     }
 
+    /**
+     * @return \App\Model\Schedule
+     */
     public function readAll()
     {
         // SQL-statement.
-        $sql = 'SELECT `std_id` AS `student`, `crs_id` AS `course`, `tms_id` AS `timeslot`, `rom_id` AS `room` '
+        $sql = 'SELECT '
+             . '`std_id` AS `student`, '
+             . '`tms_id` AS `timeslot`, '
+             . '`crs_id` AS `course`, '
+             . '`rom_id` AS `room` '
              . 'FROM `schedule`';
 
         $schedules = [];
@@ -84,28 +91,28 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
         return $schedules;
     }
 
+    /**
+     * @param  \App\Model\Student $student
+     * @return \App\Model\Schedule
+     */
     public function readAllForStudentToday(Student $student)
     {
         // SQL-statement.
-        $sql = 'SELECT `std_id` AS `student`, `crs_id` AS `course`, `tms_id` AS `timeslot`, `rom_id` AS `room` '
+        $sql = 'SELECT '
+             . '`std_id` AS `student`, '
+             . '`tms_id` AS `timeslot`, '
+             . '`crs_id` AS `course`, '
+             . '`rom_id` AS `room` '
              . 'FROM `schedule` NATURAL JOIN `timeslot` '
-             . 'WHERE `tms_day` = :today AND `std_id` = :student '
+             . 'WHERE `tms_day` = :today AND '
+             . '      `std_id`  = :student '
              . 'ORDER BY `tms_start` ASC';
 
         $stmt = $this->db->prepare($sql);
         if ($stmt) {
-            $today = [
-                1 => 'MON',
-                2 => 'TUE',
-                3 => 'WED',
-                4 => 'THU',
-                5 => 'FRI',
-                6 => 'MON',
-                7 => 'MON',
-            ];
 
             // Bind de waarden van de variabelen aan het prepared statement.
-            $stmt->bindValue(':today'  , $today[date('N')] ); // Waarde op dit moment binden.
+            $stmt->bindValue(':today'  , Day::$week[date('N')] ); // Waarde op dit moment binden.
             $stmt->bindValue(':student', $student->getId() ); // Waarde op dit moment binden.
 
             $schedules = [];
@@ -119,13 +126,21 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
         }
     }
 
+    /**
+     * @param  \App\Model\Student $student
+     * @return \App\Model\Schedule
+     */
     public function readAllForStudent(Student $student)
     {
         // SQL-statement.
-        $sql = 'SELECT `std_id` AS `student`, `crs_id` AS `course`, `tms_id` AS `timeslot`, `rom_id` AS `room` '
+        $sql = 'SELECT '
+             . '`std_id` AS `student`, '
+             . '`tms_id` AS `timeslot`, '
+             . '`crs_id` AS `course`, '
+             . '`rom_id` AS `room` '
              . 'FROM `schedule` NATURAL JOIN `timeslot` '
              . 'WHERE `std_id` = :student '
-             . 'ORDER BY tms_day ASC, `tms_start` ASC';
+             . 'ORDER BY `tms_day` ASC, `tms_start` ASC';
 
         $stmt = $this->db->prepare($sql);
         if ($stmt) {
@@ -133,13 +148,33 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
             $stmt->bindValue(':student', $student->getId() ); // Waarde op dit moment binden.
 
             $schedules = [];
-            if ($stmt->execute()) {
+            if ($stmt->execute() ) {
                 while ($row = $stmt->fetch()) {
                     $schedules[] = new Schedule($row);
                 }
             }
 
             return $schedules;
+        }
+    }
+
+    /**
+     * @param \App\Model\Schedule $schedule
+     */
+    public function delete(Schedule $schedule)
+    {
+        // SQL-statement.
+        $sql = 'DELETE '
+             . 'FROM `schedule` '
+             . 'WHERE `std_id` = :student AND '
+             . '      `tms_id` = :timeslot';
+
+        $stmt = $this->db->prepare($sql);
+        if ($stmt) {
+            // Bind de waarden van de variabelen aan het prepared statement.
+            $stmt->bindValue(':student' , $schedule->getStudent() ->getId() ); // Waarde op dit moment binden.
+            $stmt->bindValue(':timeslot', $schedule->getTimeslot()->getId() ); // Waarde op dit moment binden.
+            $stmt->execute();
         }
     }
 }
