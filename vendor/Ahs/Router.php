@@ -52,11 +52,8 @@ class Router
     public function __construct()
     {
         $request = str_replace([PATH_WEBROOT, basename($_SERVER['SCRIPT_NAME'])], '', $_SERVER['REQUEST_URI']);
-        var_dump($request); echo '<br>';
         $request = trim($request, '/');
-        var_dump($request); echo '<br>';
         $route = explode('/', $request);
-        var_dump($route); echo '<br>'; exit;
 
         // Aantal items in de array $route tellen
         $count = count($route);
