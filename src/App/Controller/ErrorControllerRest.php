@@ -32,7 +32,11 @@
 
 namespace App\Controller;
 
-class ErrorControllerRest extends \Ahs\ControllerRestAbstract
+use Ahs\ControllerRestAbstract;
+use Ahs\Http;
+use Ahs\Router;
+
+class ErrorControllerRest extends ControllerRestAbstract
 {
     public function indexAction()
     {
@@ -47,7 +51,7 @@ class ErrorControllerRest extends \Ahs\ControllerRestAbstract
     public function headAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NOT_IMPLEMENTED);
+        $view->setResponseCode(Http::STATUS_CODE_NOT_IMPLEMENTED);
     }
 
     public function deleteAction()
@@ -70,11 +74,11 @@ class ErrorControllerRest extends \Ahs\ControllerRestAbstract
      */
     public function exception()
     {
-        $body = ['error' => \Ahs\Router::$e];
+        $body = ['error' => Router::$e];
 
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NOT_IMPLEMENTED)
-             ->setContentType( \Ahs\Http::CONTENT_TYPE_JSON)
+        $view->setResponseCode(Http::STATUS_CODE_NOT_IMPLEMENTED)
+             ->setContentType( Http::CONTENT_TYPE_JSON)
              ->setBody($body);
     }
 }

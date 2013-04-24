@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class Timeslot extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+
+class Timeslot extends ModelAbstract
 {
     /**
      * Lestijd Id
@@ -124,7 +126,7 @@ class Timeslot extends \Ahs\ModelAbstract
      */
     public function setDay($day)
     {
-        $this->day = new \App\Model\Day(['id' => $day]);
+        $this->day = new Day(['id' => $day]);
     }
 
     /**

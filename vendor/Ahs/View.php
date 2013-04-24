@@ -123,7 +123,7 @@ class View
     /**
      * Render een Partial View Script.
      *
-     * @param script $partial_view
+     * @param string $partial_view
      * @throws \ErrorException
      */
     public function partial($partial_view)

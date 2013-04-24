@@ -32,7 +32,10 @@
 
 namespace App\Model;
 
-class Student extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+use Ahs\Utility;
+
+class Student extends ModelAbstract
 {
     /**
      * Student Id
@@ -76,9 +79,10 @@ class Student extends \Ahs\ModelAbstract
      */
     protected $password;
 
-
     /**
      * @param array $data
+     * @param bool $hash_salt
+     * @param bool $hash_password
      */
     public function __construct(array $data = [], $hash_salt = true, $hash_password = true)
     {
@@ -213,7 +217,7 @@ class Student extends \Ahs\ModelAbstract
      */
     public function setPassword($password, $hash = true)
     {
-        $this->password = $hash ? \Ahs\Utility::hash($password, 'sha512', $this->getSalt()) : $password;
+        $this->password = $hash ? Utility::hash($password, 'sha512', $this->getSalt()) : $password;
     }
 
     /**
@@ -229,11 +233,11 @@ class Student extends \Ahs\ModelAbstract
     /**
      * Setter voor Wachtwoord Salt
      *
-     * @param string $salt Salt voor het wachtwoord.
-     * @param bool $salt Vervang de salt door de hash-code van de salt.
+     * @param $salt
+     * @param bool $hash
      */
     public function setSalt($salt, $hash = true)
     {
-        $this->salt = $hash ? \Ahs\Utility::salt($salt) : $salt;
+        $this->salt = $hash ? Utility::salt($salt) : $salt;
     }
 }

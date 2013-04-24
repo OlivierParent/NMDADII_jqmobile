@@ -32,6 +32,8 @@
 
 namespace Ahs;
 
+use Ahs\Database\Connection;
+
 abstract class ModelMapperAbstract
 {
     /**
@@ -46,6 +48,6 @@ abstract class ModelMapperAbstract
      */
     public function __construct()
     {
-        $this->db = \Ahs\Database\Connection::getInstance();
+        $this->db = Connection::getInstance();
     }
 }

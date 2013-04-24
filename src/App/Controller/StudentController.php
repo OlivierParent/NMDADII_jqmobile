@@ -32,7 +32,11 @@
 
 namespace App\Controller;
 
-class StudentController extends \Ahs\ControllerAbstract
+use Ahs\ControllerAbstract;
+use App\Model\Student;
+use App\Model\StudentMapper;
+
+class StudentController extends ControllerAbstract
 {
     public function indexAction()
     {
@@ -45,21 +49,21 @@ class StudentController extends \Ahs\ControllerAbstract
     public function loginAction()
     {
         if (isset($_POST) && isset($_POST['button-login']) ) {
-            $student = new \App\Model\Student($_POST, false, false);
+            $student = new Student($_POST, false, false);
 
             try {
-                $studentMapper = new \App\Model\StudentMapper();
+                $studentMapper = new StudentMapper();
                 $studentMapper->hashCredentials($student);
                 $student = $studentMapper->readAuthenticate($student);
-            } catch (\Exception $e) {
-                die ($e->getMessage() );
             } catch (\ErrorException $e) {
+                die ($e->getMessage() );
+            } catch (\Exception $e) {
                 die ($e->getMessage() );
             }
 
             if ($student->getId() !== null) {
                 $this->session->create('student', $student);
-                return $this->redirect(PATH_WEBROOT . '/calendar');
+                $this->redirect(PATH_WEBROOT . '/calendar');
             }
         }
 
@@ -72,19 +76,19 @@ class StudentController extends \Ahs\ControllerAbstract
     public function registerAction()
     {
         if (isset($_POST) && isset($_POST['button-register']) ) {
-            $student = new \App\Model\Student($_POST);
+            $student = new Student($_POST);
 
             try {
-                $studentMapper = new \App\Model\StudentMapper();
+                $studentMapper = new StudentMapper();
                 $studentMapper->create($student);
-            } catch (\Exception $e) {
-                die ($e->getMessage() );
             } catch (\ErrorException $e) {
+                die ($e->getMessage() );
+            } catch (\Exception $e) {
                 die ($e->getMessage() );
             }
 
             if ($student->getId() !== null) {
-                return $this->redirect(PATH_WEBROOT);
+                $this->redirect(PATH_WEBROOT);
             }
         }
 
@@ -98,6 +102,6 @@ class StudentController extends \Ahs\ControllerAbstract
     {
         $this->session->destroy();
 
-		return $this->redirect(PATH_WEBROOT);
+		$this->redirect(PATH_WEBROOT);
     }
 }

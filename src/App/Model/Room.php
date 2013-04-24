@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class Room extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+
+class Room extends ModelAbstract
 {
     /**
      * Lokaal Id

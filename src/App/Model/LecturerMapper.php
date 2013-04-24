@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class LecturerMapper extends \Ahs\ModelMapperAbstract
+use Ahs\ModelMapperAbstract;
+
+class LecturerMapper extends ModelMapperAbstract
 {
     /**
      * @param  \App\Model\Lecturer $lecturer
@@ -68,7 +70,8 @@ class LecturerMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Lecturer $lecturer
+     * @param Lecturer $lecturer
+     * @return Lecturer
      * @throws \Exception
      */
     public function read(Lecturer $lecturer)
@@ -99,7 +102,7 @@ class LecturerMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @return array \App\Model\Lecturer
+     * @return array Lecturer
      */
     public function readAll()
     {
@@ -123,8 +126,8 @@ class LecturerMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Course $course
-     * @return array \App\Model\Lecturer
+     * @param Course $course
+     * @return array Lecturer
      */
     public function readAllForCourse(Course $course)
     {
@@ -153,5 +156,7 @@ class LecturerMapper extends \Ahs\ModelMapperAbstract
 
             return $lecturers;
         }
+
+        return [];
     }
 }

@@ -32,11 +32,13 @@
 
 namespace App\Model;
 
-class CourseMapper extends \Ahs\ModelMapperAbstract
+use Ahs\ModelMapperAbstract;
+
+class CourseMapper extends ModelMapperAbstract
 {
     /**
-     * @param  \App\Model\Course $course
-     * @param  \App\Model\Lecturer $lecturer
+     * @param  Course $course
+     * @param  Lecturer $lecturer
      * @return string
      * @throws \Exception
      * @throws \ErrorException
@@ -66,7 +68,8 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Course $course
+     * @param Course $course
+     * @return Course
      * @throws \Exception
      */
     public function read(Course $course)
@@ -95,7 +98,7 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @return array \App\Model\Course
+     * @return array
      */
     public function readAll()
     {
@@ -120,7 +123,7 @@ class CourseMapper extends \Ahs\ModelMapperAbstract
      * URL: /web/service/course/name/...
      *
      * @param string $name Naam van het opleidingsonderdeel
-     * @return array \App\Model\Course
+     * @return array
      */
     public function readAllLike($name)
     {

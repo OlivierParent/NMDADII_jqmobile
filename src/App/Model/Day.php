@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class Day extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+
+class Day extends ModelAbstract
 {
     const MON = 'MON';
     const TUE = 'TUE';

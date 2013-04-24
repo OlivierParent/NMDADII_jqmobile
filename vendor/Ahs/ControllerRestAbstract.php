@@ -54,6 +54,6 @@ abstract class ControllerRestAbstract
      */
     protected function getView()
     {
-        return new \Ahs\ViewRest();
+        return new ViewRest();
     }
 }

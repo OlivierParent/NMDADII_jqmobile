@@ -32,51 +32,57 @@
 
 namespace App\Controller;
 
-class ScheduleControllerRest extends \Ahs\ControllerRestAbstract
+use Ahs\ControllerRestAbstract;
+use Ahs\Http;
+use Ahs\Route;
+use App\Model\Schedule;
+use App\Model\ScheduleMapper;
+
+class ScheduleControllerRest extends ControllerRestAbstract
 {
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+        $view->setResponseCode(Http::STATUS_CODE_OK)
              ->setBody(__METHOD__);
     }
 
     public function deleteAction()
     {
-        $data = \Ahs\Route::getArgs();
-        $schedule = new \App\Model\Schedule($data);
-        $scheduleMapper = new \App\Model\ScheduleMapper();
+        $data = Route::getArgs();
+        $schedule = new Schedule($data);
+        $scheduleMapper = new ScheduleMapper();
         $result = $scheduleMapper->delete($schedule);
         if ($result) {
             $view = $this->getView();
-            $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK);
+            $view->setResponseCode(Http::STATUS_CODE_OK);
         }
     }
 
     public function getAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+        $view->setResponseCode(Http::STATUS_CODE_OK)
              ->setBody(__METHOD__);
     }
 
     public function headAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NO_CONTENT);
+        $view->setResponseCode(Http::STATUS_CODE_NO_CONTENT);
     }
 
     public function postAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+        $view->setResponseCode(Http::STATUS_CODE_CREATED)
              ->setBody(__METHOD__);
     }
 
     public function putAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+        $view->setResponseCode(Http::STATUS_CODE_CREATED)
              ->setBody(__METHOD__);
     }
 }
