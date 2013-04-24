@@ -32,13 +32,15 @@
 
 namespace App\Model;
 
-class StudentMapper extends \Ahs\ModelMapperAbstract
+use Ahs\ModelMapperAbstract;
+
+class StudentMapper extends ModelMapperAbstract
 {
     /**
-     * @param  \App\Model\Student $student
-     * @return \App\Model\Student
-     * @throws \Exception
+     * @param Student $student
+     * @return Student
      * @throws \ErrorException
+     * @throws \Exception
      */
     public function create(Student $student)
     {
@@ -70,7 +72,8 @@ class StudentMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Student $student
+     * @param Student $student
+     * @return Student
      * @throws \Exception
      */
     public function read(Student $student)
@@ -104,7 +107,8 @@ class StudentMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Student $student
+     * @param Student $student
+     * @return Student
      * @throws \Exception
      */
     public function readAuthenticate(Student $student)
@@ -142,8 +146,8 @@ class StudentMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Student $student
-     * @return \App\Model\Student
+     * @param Student $student
+     * @return Student
      * @throws \Exception
      */
     public function hashCredentials(Student $student)

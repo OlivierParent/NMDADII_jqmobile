@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class Course extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+
+class Course extends ModelAbstract
 {
     /**
      * Opleidingsonderdeel Id
@@ -129,8 +131,7 @@ class Course extends \Ahs\ModelAbstract
     }
 
     /**
-     *
-     * @param \App\Model\Lecturer $lecturer
+     * @param Lecturer $lecturer
      */
     public function addLecturer(Lecturer $lecturer)
     {

@@ -32,10 +32,13 @@
 
 namespace App\Model;
 
-class TimeslotMapper extends \Ahs\ModelMapperAbstract
+use Ahs\ModelMapperAbstract;
+
+class TimeslotMapper extends ModelMapperAbstract
 {
     /**
-     * @param  \App\Model\Timeslot $timeslot
+     * @param Timeslot $timeslot
+     * @return Timeslot
      * @throws \Exception
      */
     public function read(Timeslot $timeslot)
@@ -65,9 +68,8 @@ class TimeslotMapper extends \Ahs\ModelMapperAbstract
         }
     }
 
-
     /**
-     * @return array \App\Model\Timeslot
+     * @return array Timeslot
      */
     public function readAll()
     {
@@ -91,7 +93,7 @@ class TimeslotMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @return array \App\Model\Day
+     * @return array Day
      */
     public function readAllDays()
     {

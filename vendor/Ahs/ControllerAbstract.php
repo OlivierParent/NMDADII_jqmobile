@@ -54,7 +54,7 @@ abstract class ControllerAbstract
      */
     protected function getView()
     {
-        return new \Ahs\View();
+        return new View();
     }
 
     /**

@@ -32,13 +32,15 @@
 
 namespace App\Model;
 
-class ScheduleMapper extends \Ahs\ModelMapperAbstract
+use Ahs\ModelMapperAbstract;
+
+class ScheduleMapper extends ModelMapperAbstract
 {
     /**
-     * @param  \App\Model\Schedule $schedule
-     * @return \App\Model\Schedule
-     * @throws \Exception
+     * @param Schedule $schedule
+     * @return Schedule
      * @throws \ErrorException
+     * @throws \Exception
      */
     public function create(Schedule $schedule)
     {
@@ -69,7 +71,7 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @return \App\Model\Schedule
+     * @return array Schedule
      */
     public function readAll()
     {
@@ -92,8 +94,8 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Student $student
-     * @return \App\Model\Schedule
+     * @param Student $student
+     * @return array Schedule
      */
     public function readAllForStudentToday(Student $student)
     {
@@ -127,8 +129,8 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param  \App\Model\Student $student
-     * @return \App\Model\Schedule
+     * @param Student $student
+     * @return array Schedule
      */
     public function readAllForStudent(Student $student)
     {
@@ -159,7 +161,7 @@ class ScheduleMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @param \App\Model\Schedule $schedule
+     * @param Schedule $schedule
      */
     public function delete(Schedule $schedule)
     {

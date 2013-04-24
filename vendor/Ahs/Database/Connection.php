@@ -35,6 +35,8 @@
 
 namespace Ahs\Database;
 
+use Ahs\ApplicationAbstract;
+
 class Connection
 {
     /**
@@ -68,7 +70,6 @@ class Connection
     /**
      * Geeft de instantie terug, en maakt zo nodig een instantie aan.
      *
-     * @static
      * @return \PDO
      */
     public static function getInstance()
@@ -83,12 +84,12 @@ class Connection
     /**
      * Haalt de configuratie op en maakt een connectie met de databaseserver.
      *
-     * @static
      * @return bool
+     * @throws \ErrorException
      */
     protected static function createInstance()
     {
-        $filename = PATH_CONFIG . \Ahs\ApplicationAbstract::FILE_CONFIG_DATABASE;
+        $filename = PATH_CONFIG . ApplicationAbstract::FILE_CONFIG_DATABASE;
         if (file_exists($filename)) {
             $config = parse_ini_file($filename); // Zie: http://php.net/manual/en/function.parse-ini-file.php
             // 'Data Source Name' samenstellen
@@ -107,7 +108,7 @@ class Connection
                                            $config['username'],
                                            $config['password'],
                                           @$config['options' ]);
-                self::$instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+                self::$instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch (\PDOException $e) {
                 throw new \ErrorException('Cannot connect to database (<em>' . $e->getMessage() . '</em>)');
             }

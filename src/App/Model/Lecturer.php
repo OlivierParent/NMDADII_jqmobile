@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class Lecturer extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+
+class Lecturer extends ModelAbstract
 {
     /**
      * Docent Id

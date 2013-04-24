@@ -32,7 +32,9 @@
 
 namespace App\Model;
 
-class Schedule extends \Ahs\ModelAbstract
+use Ahs\ModelAbstract;
+
+class Schedule extends ModelAbstract
 {
     /**
      * Opleidingsonderdeel Id
@@ -44,28 +46,28 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Student
      *
-     * @var \App\Model\Student
+     * @var Student
      */
     protected $student;
 
     /**
      * Opleidingsonderdeel
      *
-     * @var \App\Model\Course
+     * @var Course
      */
     protected $course;
 
     /**
      * Lestijd
      *
-     * @var \App\Model\Timeslot
+     * @var Timeslot
      */
     protected $timeslot;
 
     /**
      * Lokaal
      *
-     * @var \App\Model\Room
+     * @var Room
      */
     protected $room;
 
@@ -135,7 +137,7 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Setter voor Student
      *
-     * @param \App\Model\Student $student
+     * @param Student $student
      */
     public function setStudent(Student $student)
     {
@@ -145,7 +147,7 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Getter voor Opleidingsonderdeel
      *
-     * @return \App\Model\Course
+     * @return Course
      */
     public function getCourse()
     {
@@ -155,7 +157,7 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Setter voor Opleidingsonderdeel
      *
-     * @param \App\Model\Course $course
+     * @param Course $course
      */
     public function setCourse(Course $course)
     {
@@ -165,7 +167,7 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Getter voor Lestijd
      *
-     * @return \App\Model\Timeslot
+     * @return Timeslot
      */
     public function getTimeslot()
     {
@@ -185,7 +187,7 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Getter voor Lokaal
      *
-     * @return \App\Model\Room
+     * @return Room
      */
     public function getRoom()
     {
@@ -195,7 +197,7 @@ class Schedule extends \Ahs\ModelAbstract
     /**
      * Setter voor Lokaal
      *
-     * @param \App\Model\Room $room
+     * @param Room $room
      */
     public function setRoom(Room $room)
     {

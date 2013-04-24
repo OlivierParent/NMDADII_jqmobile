@@ -32,7 +32,9 @@
 
 namespace App;
 
-class Application extends \Ahs\ApplicationAbstract
+use Ahs\ApplicationAbstract;
+
+class Application extends ApplicationAbstract
 {
     
 }

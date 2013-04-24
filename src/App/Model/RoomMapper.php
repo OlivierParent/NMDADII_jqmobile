@@ -32,10 +32,13 @@
 
 namespace App\Model;
 
-class RoomMapper extends \Ahs\ModelMapperAbstract
+use Ahs\ModelMapperAbstract;
+
+class RoomMapper extends ModelMapperAbstract
 {
     /**
-     * @param  \App\Model\Room $room
+     * @param Room $room
+     * @return Room
      * @throws \Exception
      */
     public function read(Room $room)
@@ -65,7 +68,7 @@ class RoomMapper extends \Ahs\ModelMapperAbstract
     }
 
     /**
-     * @return array \App\Model\Room
+     * @return array Room
      */
     public function readAll()
     {

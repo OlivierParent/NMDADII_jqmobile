@@ -64,11 +64,11 @@ class Utility
     /**
      * Bereken eenmalige een unieke hash-code met 64 tekens.
      *
-     * @static
      * @param string $data Te hashen gegevens.
      * @param string $algo Gebruikt algoritme, bijvoorbeeld 'sha256'.
      * @param string $salt
-     * @param bool   $timed
+     * @param int $iterations
+     * @param bool $timed
      * @return string
      */
     public static function salt($data, $algo = 'sha256', $salt = '', $iterations = 5000, $timed = true)
