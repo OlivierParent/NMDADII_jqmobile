@@ -32,38 +32,43 @@
 
 namespace App\Controller;
 
-class CourseControllerRest extends \Ahs\ControllerRestAbstract
+use Ahs\ControllerRestAbstract;
+use Ahs\Http;
+use Ahs\Route;
+use App\Model\CourseMapper;
+
+class CourseControllerRest extends ControllerRestAbstract
 {
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+        $view->setResponseCode(Http::STATUS_CODE_OK)
              ->setBody(__METHOD__);
     }
 
     public function deleteAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
+        $view->setResponseCode(Http::STATUS_CODE_OK)
              ->setBody(__METHOD__);
     }
 
     public function getAction()
     {
-        $args = \Ahs\Route::getArgs();
+        $args = Route::getArgs();
         $name = isset($args['name']) ? $args['name'] : '';
-        $courseMapper = new \App\Model\CourseMapper();
+        $courseMapper = new CourseMapper();
         $courses = $courseMapper->readAllLike($name);
 
         $view = $this->getView();
         if (empty($courses)) {
-            $view->setResponseCode(\Ahs\Http::STATUS_CODE_NO_CONTENT);
+            $view->setResponseCode(Http::STATUS_CODE_NO_CONTENT);
         } else {
             foreach ($courses as $key => $course) {
                 $courses[$key] = $course->toArray();
             }
-            $view->setResponseCode(\Ahs\Http::STATUS_CODE_OK)
-                 ->setContentType(\Ahs\Http::CONTENT_TYPE_JSON)
+            $view->setResponseCode(Http::STATUS_CODE_OK)
+                 ->setContentType(Http::CONTENT_TYPE_JSON)
                  ->setBody($courses);
         }
     }
@@ -71,21 +76,21 @@ class CourseControllerRest extends \Ahs\ControllerRestAbstract
     public function headAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_NO_CONTENT)
+        $view->setResponseCode(Http::STATUS_CODE_NO_CONTENT)
              ->setBody(__METHOD__);
     }
 
     public function postAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+        $view->setResponseCode(Http::STATUS_CODE_CREATED)
              ->setBody(__METHOD__);
     }
 
     public function putAction()
     {
         $view = $this->getView();
-        $view->setResponseCode(\Ahs\Http::STATUS_CODE_CREATED)
+        $view->setResponseCode(Http::STATUS_CODE_CREATED)
              ->setBody(__METHOD__);
     }
 }

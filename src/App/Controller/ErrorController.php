@@ -32,11 +32,14 @@
 
 namespace App\Controller;
 
-class ErrorController extends \Ahs\ControllerAbstract
+use Ahs\ControllerAbstract;
+use Ahs\Router;
+
+class ErrorController extends ControllerAbstract
 {
     public function indexAction()
     {
         $view = $this->getView();
-        $view->exception = \Ahs\Router::$e;
+        $view->exception = Router::$e;
     }
 }

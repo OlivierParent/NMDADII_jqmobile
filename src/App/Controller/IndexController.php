@@ -32,7 +32,9 @@
 
 namespace App\Controller;
 
-class IndexController extends \Ahs\ControllerAbstract
+use Ahs\ControllerAbstract;
+
+class IndexController extends ControllerAbstract
 {
     public function indexAction()
     {

@@ -32,7 +32,16 @@
 
 namespace App\Controller;
 
-class CalendarController extends \Ahs\ControllerAbstract
+use Ahs\ControllerAbstract;
+use App\Model\CourseMapper;
+use App\Model\Lecturer;
+use App\Model\LecturerMapper;
+use App\Model\RoomMapper;
+use App\Model\Schedule;
+use App\Model\ScheduleMapper;
+use App\Model\TimeslotMapper;
+
+class CalendarController extends ControllerAbstract
 {
     public function indexAction()
     {
@@ -42,7 +51,7 @@ class CalendarController extends \Ahs\ControllerAbstract
         $view->addHeadScript($view->path('assets/js/calendar/index.js'));
         $view->student = $student;
 
-        $scheduleMapper = new \App\Model\ScheduleMapper();
+        $scheduleMapper = new ScheduleMapper();
         $view->scheduleToday    = $scheduleMapper->readAllForStudentToday($student);
         $view->scheduleThisWeek = $scheduleMapper->readAllForStudent($student);
     }
@@ -52,9 +61,9 @@ class CalendarController extends \Ahs\ControllerAbstract
         if (isset($_POST) && isset($_POST['button-schedule'])) {
             $student = $this->session->read('student');
 
-            $scheduleMapper = new \App\Model\ScheduleMapper();
+            $scheduleMapper = new ScheduleMapper();
             foreach ($_POST['timeslots'] as $timeslot) {
-                $schedule = new \App\Model\Schedule([
+                $schedule = new Schedule([
                     'student'  => $student->getId(),
                     'course'   => $_POST['course'],
                     'timeslot' => $timeslot,
@@ -64,9 +73,9 @@ class CalendarController extends \Ahs\ControllerAbstract
                 $scheduleMapper->create($schedule);
             }
 
-            $courseMapper = new \App\Model\CourseMapper();
+            $courseMapper = new CourseMapper();
             foreach ($_POST['lecturers'] as $lecturer_id) {
-                $lecturer = new \App\Model\Lecturer(['id' => $lecturer_id]);
+                $lecturer = new Lecturer(['id' => $lecturer_id]);
                 $courseMapper->createHasLecturer($schedule->getCourse(), $lecturer);
             }
 
@@ -75,17 +84,17 @@ class CalendarController extends \Ahs\ControllerAbstract
         $view = $this->getView();
         $view->addHeadScript($view->path('assets/js/calendar/add.js') );
 
-        $courseMapper  = new \App\Model\CourseMapper();
+        $courseMapper  = new CourseMapper();
         $view->courses = $courseMapper->readAll();
 
-        $timeslotMapper  = new \App\Model\TimeslotMapper();
+        $timeslotMapper  = new TimeslotMapper();
         $view->timeslots = $timeslotMapper->readAll();
         $view->days      = $timeslotMapper->readAllDays();
 
-        $roomMapper  = new \App\Model\RoomMapper();
+        $roomMapper  = new RoomMapper();
         $view->rooms = $roomMapper->readAll();
 
-        $lecturerMapper  = new \App\Model\LecturerMapper();
+        $lecturerMapper  = new LecturerMapper();
         $view->lecturers = $lecturerMapper->readAll();
     }
 }
