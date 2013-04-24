@@ -43,14 +43,14 @@ class CourseControllerRest extends ControllerRestAbstract
     {
         $view = $this->getView();
         $view->setResponseCode(Http::STATUS_CODE_OK)
-             ->setBody(__METHOD__);
+             ->setBody(__CLASS__ . ' ' .__METHOD__);
     }
 
     public function deleteAction()
     {
         $view = $this->getView();
         $view->setResponseCode(Http::STATUS_CODE_OK)
-             ->setBody(__METHOD__);
+             ->setBody(__CLASS__ . ' ' .__METHOD__);
     }
 
     public function getAction()
@@ -77,20 +77,20 @@ class CourseControllerRest extends ControllerRestAbstract
     {
         $view = $this->getView();
         $view->setResponseCode(Http::STATUS_CODE_NO_CONTENT)
-             ->setBody(__METHOD__);
+             ->setBody(__CLASS__ . ' ' .__METHOD__);
     }
 
     public function postAction()
     {
         $view = $this->getView();
         $view->setResponseCode(Http::STATUS_CODE_CREATED)
-             ->setBody(__METHOD__);
+             ->setBody(__CLASS__ . ' ' .__METHOD__);
     }
 
     public function putAction()
     {
         $view = $this->getView();
         $view->setResponseCode(Http::STATUS_CODE_CREATED)
-             ->setBody(__METHOD__);
+             ->setBody(__CLASS__ . ' ' .__METHOD__);
     }
 }

@@ -2,11 +2,10 @@
 /**
  * Constanten definiëren
  */
-define('PATH'        , dirname($_SERVER['SCRIPT_FILENAME'])); // Pad vanaf de root
-define('PATH_VENDOR' , realpath(PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor') . DIRECTORY_SEPARATOR);
-define('PATH_SOURCE' , realpath(PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'src'   ) . DIRECTORY_SEPARATOR);
+define('PATH_VENDOR' , realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor') . DIRECTORY_SEPARATOR);
+define('PATH_SOURCE' , realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'src'   ) . DIRECTORY_SEPARATOR);
 define('PATH_CONFIG' , PATH_SOURCE . 'config' . DIRECTORY_SEPARATOR);
-define('PATH_WEBROOT', dirname($_SERVER['SCRIPT_NAME']) );   // Pad vanaf de map waarin het project staat
+define('PATH_WEBROOT', dirname($_SERVER['SCRIPT_NAME']) );   // Pad vanaf de map waarin het project staat.
 
 /**
  * Eenvoudige Autoloader om klassen automatisch in te laden.
