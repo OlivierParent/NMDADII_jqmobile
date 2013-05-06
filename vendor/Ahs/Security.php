@@ -1,5 +1,4 @@
 <?php
-
 /* * ****************************************************************************
  *                                                                            *
  *                                                                            *
@@ -35,7 +34,6 @@ namespace Ahs;
 
 class Security
 {
-
     const ALGO_SHA512   = '6';  // Veilig genoeg (86 tekens)
     const ALGO_BLOWFISH = '2y'; // Veiliger (PHP 5.3.7+, 32 tekens)
 
@@ -114,5 +112,4 @@ class Security
     {
         return self::hash($data, $algo, $salt, $cost);
     }
-
 }
