@@ -32,6 +32,7 @@
 
 namespace App\Model;
 
+use Ahs\Error;
 use Ahs\ModelMapperAbstract;
 
 class ScheduleMapper extends ModelMapperAbstract
@@ -62,12 +63,11 @@ class ScheduleMapper extends ModelMapperAbstract
             if ($stmt->execute()) {
                 // Geeft de waarde terug van de AUTO_INCREMENT kolom van de laatst ingevoegde rij.
                 $schedule->setId($this->db->lastInsertId());
-
                 return $schedule;
             }
-            throw new \Exception('Could not create `Schedule`');
+            throw new \Exception(sprintf(Error::MESSAGE_CREATE, get_class($schedule) ) );
         }
-        throw new \ErrorException('Unexpected error');
+        throw new \ErrorException(Error::MESSAGE_UNEXPECTED);
     }
 
     /**
@@ -85,9 +85,11 @@ class ScheduleMapper extends ModelMapperAbstract
 
         $schedules = [];
 
-        $res = $this->db->query($sql);
-        while ($row = $res->fetch()) {
-            $schedules[] = new Schedule($row);
+        $stmt = $this->db->query($sql);
+        if ($stmt) {
+            while ($row = $stmt->fetch()) {
+                $schedules[] = new Schedule($row);
+            }
         }
 
         return $schedules;
@@ -118,8 +120,9 @@ class ScheduleMapper extends ModelMapperAbstract
             $stmt->bindValue(':student', $student->getId() ); // Waarde op dit moment binden.
 
             $schedules = [];
-            if ($stmt->execute()) {
-                while ($row = $stmt->fetch()) {
+
+            if ($stmt->execute() ) {
+                while ($row = $stmt->fetch() ) {
                     $schedules[] = new Schedule($row);
                 }
             }
@@ -151,7 +154,7 @@ class ScheduleMapper extends ModelMapperAbstract
 
             $schedules = [];
             if ($stmt->execute() ) {
-                while ($row = $stmt->fetch()) {
+                while ($row = $stmt->fetch() ) {
                     $schedules[] = new Schedule($row);
                 }
             }

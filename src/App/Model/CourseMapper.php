@@ -32,6 +32,7 @@
 
 namespace App\Model;
 
+use Ahs\Error;
 use Ahs\ModelMapperAbstract;
 
 class CourseMapper extends ModelMapperAbstract
@@ -62,9 +63,9 @@ class CourseMapper extends ModelMapperAbstract
 
                 return $this->db->lastInsertId();
             }
-            throw new \Exception('Could not create `course_has_lecturer`');
+            throw new \Exception(sprinf(Error::MESSAGE_CREATE, 'course_has_lecturer') );
         }
-        throw new \ErrorException('Unexpected error');
+        throw new \ErrorException(Error::MESSAGE_UNEXPECTED);
     }
 
     /**
@@ -93,7 +94,7 @@ class CourseMapper extends ModelMapperAbstract
 
                 return new Course($row);
             }
-            throw new \Exception('Could not read `course`');
+            throw new \Exception(sprintf(Error::MESSAGE_READ, get_class($course) ) );
         }
     }
 

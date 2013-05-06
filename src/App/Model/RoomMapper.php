@@ -32,6 +32,7 @@
 
 namespace App\Model;
 
+use Ahs\Error;
 use Ahs\ModelMapperAbstract;
 
 class RoomMapper extends ModelMapperAbstract
@@ -59,12 +60,13 @@ class RoomMapper extends ModelMapperAbstract
 
             // Voer het prepared statement uit.
             if ($stmt->execute() ) {
-                $row = $stmt->fetch();
-
-                return new Room($row);
+                if ($row = $stmt->fetch() ) {
+                    return new Room($row);
+                }
             }
-            throw new \Exception('Could not read `room`');
+            throw new \Exception(sprintf(Error::MESSAGE_READ, get_class($room) ) );
         }
+        throw new \Exception(Error::MESSAGE_UNEXPECTED);
     }
 
     /**
@@ -81,9 +83,11 @@ class RoomMapper extends ModelMapperAbstract
 
         $rooms = [];
 
-        $res = $this->db->query($sql);
-        while ($row = $res->fetch() ) {
-            $rooms[] = new Room($row);
+        $stmt = $this->db->query($sql);
+        if ($stmt) {
+            while ($row = $stmt->fetch() ) {
+                $rooms[] = new Room($row);
+            }
         }
 
         return $rooms;

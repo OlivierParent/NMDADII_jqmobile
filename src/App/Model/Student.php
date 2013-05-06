@@ -1,5 +1,6 @@
 <?php
-/******************************************************************************
+
+/* * ****************************************************************************
  *                                                                            *
  *                                                                            *
  *                                                                            *
@@ -24,7 +25,7 @@
  *                                 MEMBER OF GHENT UNIVERITY ASSOCIATION      *
  *                                                                            *
  *                                                                            *
- ******************************************************************************
+ * *****************************************************************************
  *
  * @author     Olivier Parent
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
@@ -33,10 +34,11 @@
 namespace App\Model;
 
 use Ahs\ModelAbstract;
-use Ahs\Utility;
+use Ahs\Security;
 
 class Student extends ModelAbstract
 {
+
     /**
      * Student Id
      *
@@ -81,10 +83,9 @@ class Student extends ModelAbstract
 
     /**
      * @param array $data
-     * @param bool $hash_salt
-     * @param bool $hash_password
+     * @param bool $salt Salt genereren.
      */
-    public function __construct(array $data = [], $hash_salt = true, $hash_password = true)
+    public function __construct(array $data = [], $salt = false)
     {
         foreach ($data as $key => $value) {
             switch ($key) {
@@ -100,22 +101,19 @@ class Student extends ModelAbstract
                 case 'email':
                     $this->setEmail($value);
                     break;
+                case 'password':
+                    $this->setPassword($value);
+                    break;
                 default:
                     break;
             }
         }
 
-        $salt = $this->getEmail();
-        if (isset($data['salt'])) {
-            $this->setSalt($salt, $hash_salt);
-        } else {
-            if ($hash_salt) {
-                $this->setSalt($salt);
-            }
-        }
-
-        if (isset($data['password'])) {
-            $this->setPassword($data['password'], $hash_password);
+        // Moet uitgevoerd worden nadat het wachtwoord ingesteld is.
+        if (isset($data['salt']) && !empty($data['salt'])) {
+            $this->setSalt($data['salt']);
+        } elseif ($salt) {
+            $this->setSalt();
         }
     }
 
@@ -213,11 +211,10 @@ class Student extends ModelAbstract
      * Setter voor Wachtwoord
      *
      * @param string $password
-     * @param bool $hash Vervang het wachtwoord door de hash-code van het wachtwoord.
      */
-    public function setPassword($password, $hash = true)
+    public function setPassword($password)
     {
-        $this->password = $hash ? Utility::hash($password, 'sha512', $this->getSalt()) : $password;
+        $this->password = $password;
     }
 
     /**
@@ -234,10 +231,11 @@ class Student extends ModelAbstract
      * Setter voor Wachtwoord Salt
      *
      * @param $salt
-     * @param bool $hash
      */
-    public function setSalt($salt, $hash = true)
+    public function setSalt($salt = null)
     {
-        $this->salt = $hash ? Utility::salt($salt) : $salt;
+        $this->salt = ($salt === null) ? Security::generateSalt() : $salt;
+        $this->password = Security::hash($this->password, $this->salt);
     }
+
 }

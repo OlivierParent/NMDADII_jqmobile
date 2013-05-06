@@ -52,7 +52,7 @@ class ViewRest
     public function __destruct()
     {
         http_response_code($this->responseCode);
-        header("Content-Type: {$this->contentType}");
+        header("Content-Type: {$this->contentType}, charset=utf-8");
         switch ($this->contentType) {
             case http::CONTENT_TYPE_JSON:
                 echo json_encode($this->body);

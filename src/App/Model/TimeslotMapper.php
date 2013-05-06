@@ -32,6 +32,7 @@
 
 namespace App\Model;
 
+use Ahs\Error;
 use Ahs\ModelMapperAbstract;
 
 class TimeslotMapper extends ModelMapperAbstract
@@ -64,8 +65,9 @@ class TimeslotMapper extends ModelMapperAbstract
 
                 return new Timeslot($row);
             }
-            throw new \Exception('Could not read `Timeslot`');
+            throw new \Exception(sprintf(Error::MESSAGE_READ, get_class($timeslot) ) );
         }
+        throw new \Exception(Error::MESSAGE_UNEXPECTED);
     }
 
     /**
@@ -84,8 +86,8 @@ class TimeslotMapper extends ModelMapperAbstract
 
         $timeslots = [];
 
-        $res = $this->db->query($sql);
-        while ($row = $res->fetch() ) {
+        $stmt = $this->db->query($sql);
+        while ($row = $stmt->fetch() ) {
             $timeslots[] = new Timeslot($row);
         }
 
@@ -102,13 +104,13 @@ class TimeslotMapper extends ModelMapperAbstract
              . 'FROM `timeslot` '
              . 'ORDER BY `name` ASC';
 
-        $res = $this->db->query($sql);
         $days = [];
-        if ($res_days = $res->fetchAll() ) {
-            foreach ($res_days as $res_day) {
-                $days[] = new Day($res_day);
-            }
+
+        $stmt = $this->db->query($sql);
+        while($row = $stmt->fetch() ) {
+            $days[] = new Day($row);
         }
+
         return $days;
     }
 }
