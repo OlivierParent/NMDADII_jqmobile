@@ -36,13 +36,12 @@ namespace Ahs;
 class Security
 {
 
-    const ALGO_SHA512 = '6';    // Veilig genoeg (86 tekens)
+    const ALGO_SHA512   = '6';  // Veilig genoeg (86 tekens)
     const ALGO_BLOWFISH = '2y'; // Veiliger (PHP 5.3.7+, 32 tekens)
 
     /**
      * Bereken een hash-code voor een karakterstring met crypt().
      *
-     * @static
      * @param string $str  Te hashen karakterstring.
      * @param string $salt Te gebruiken salt om een unieke hash-code te berekenen.
      * @param string $algo Te gebruiken algoritme.
