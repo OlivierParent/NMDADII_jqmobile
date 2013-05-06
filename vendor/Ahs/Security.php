@@ -44,8 +44,8 @@ class Security
      *
      * @static
      * @param string $str  Te hashen karakterstring.
-     * @param string $algo Te gebruiken algoritme.
      * @param string $salt Te gebruiken salt om een unieke hash-code te berekenen.
+     * @param string $algo Te gebruiken algoritme.
      * @param int    $cost Aantal keer dat het hash-algoritme uitgevoerd wordt.
      * @return string
      */
