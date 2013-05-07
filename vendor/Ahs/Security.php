@@ -1,4 +1,5 @@
 <?php
+
 /* * ****************************************************************************
  *                                                                            *
  *                                                                            *
@@ -34,8 +35,10 @@ namespace Ahs;
 
 class Security
 {
-    const ALGO_SHA512   = '6';  // Veilig genoeg (86 tekens)
+
+    const ALGO_SHA512 = '6';  // Veilig genoeg (86 tekens)
     const ALGO_BLOWFISH = '2y'; // Veiliger (PHP 5.3.7+, 32 tekens)
+    const BASE = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
     /**
      * Bereken een hash-code voor een karakterstring met crypt().
@@ -46,7 +49,6 @@ class Security
      * @param int    $cost Aantal keer dat het hash-algoritme uitgevoerd wordt.
      * @return string
      */
-
     public static function hash($str = '', $salt = '', $algo = self::ALGO_BLOWFISH, $cost = 5000)
     {
         switch ($algo) {
@@ -89,12 +91,11 @@ class Security
                 break;
         }
 
-        $seed = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        $max = strlen($seed) - 1;
+        $max = strlen(self::BASE ) - 1;
 
         $salt = '';
         while (0 < $length--) {
-            $salt .= substr($seed, mt_rand(0, $max), 1);
+            $salt .= substr(self::BASE, mt_rand(0, $max), 1);
         }
         return $salt;
     }
@@ -112,4 +113,5 @@ class Security
     {
         return self::hash($data, $algo, $salt, $cost);
     }
+
 }
