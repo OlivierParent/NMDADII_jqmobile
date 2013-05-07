@@ -91,7 +91,7 @@ class Security
                 break;
         }
 
-        $max = strlen(self::BASE64 ) - 1;
+        $max = strlen(self::BASE64) - 1;
 
         $salt = '';
         while (0 < $length--) {
