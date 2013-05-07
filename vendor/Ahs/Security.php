@@ -1,6 +1,5 @@
 <?php
-
-/* * ****************************************************************************
+/******************************************************************************
  *                                                                            *
  *                                                                            *
  *                                                                            *
@@ -25,7 +24,7 @@
  *                                 MEMBER OF GHENT UNIVERITY ASSOCIATION      *
  *                                                                            *
  *                                                                            *
- * *****************************************************************************
+ ******************************************************************************
  *
  * @author     Olivier Parent
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
@@ -36,7 +35,7 @@ namespace Ahs;
 class Security
 {
 
-    const ALGO_SHA512 = '6';    // Veilig genoeg (86 tekens)
+    const ALGO_SHA512   = '6';  // Veilig genoeg (86 tekens)
     const ALGO_BLOWFISH = '2y'; // Veiliger (PHP 5.3.7+, 32 tekens)
     const BASE64 = '0123456789./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
