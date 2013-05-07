@@ -36,9 +36,9 @@ namespace Ahs;
 class Security
 {
 
-    const ALGO_SHA512 = '6';  // Veilig genoeg (86 tekens)
+    const ALGO_SHA512 = '6';    // Veilig genoeg (86 tekens)
     const ALGO_BLOWFISH = '2y'; // Veiliger (PHP 5.3.7+, 32 tekens)
-    const BASE = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const BASE64 = '0123456789./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
     /**
      * Bereken een hash-code voor een karakterstring met crypt().
@@ -91,11 +91,11 @@ class Security
                 break;
         }
 
-        $max = strlen(self::BASE ) - 1;
+        $max = strlen(self::BASE64 ) - 1;
 
         $salt = '';
         while (0 < $length--) {
-            $salt .= substr(self::BASE, mt_rand(0, $max), 1);
+            $salt .= substr(self::BASE64, mt_rand(0, $max), 1);
         }
         return $salt;
     }
