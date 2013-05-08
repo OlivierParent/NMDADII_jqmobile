@@ -234,7 +234,7 @@ class Student extends ModelAbstract
     public function setSalt($salt = null)
     {
         $this->salt = ($salt === null) ? Security::generateSalt() : $salt;
-        $this->password = Security::hash($this->password, $this->salt);
+        $this->password = Security::password($this->password, $this->salt);
     }
 
 }
