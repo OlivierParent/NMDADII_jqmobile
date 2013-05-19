@@ -1,5 +1,6 @@
 <?php
-/******************************************************************************
+
+/* * ****************************************************************************
  *                                                                            *
  *                                                                            *
  *                                                                            *
@@ -24,7 +25,7 @@
  *                                 MEMBER OF GHENT UNIVERITY ASSOCIATION      *
  *                                                                            *
  *                                                                            *
- ******************************************************************************
+ * *****************************************************************************
  *
  * @author     Olivier Parent
  * @copyright  Copyright (c) 2013 Artevelde University College Ghent
@@ -38,6 +39,7 @@ use App\Model\StudentMapper;
 
 class StudentController extends ControllerAbstract
 {
+
     public function indexAction()
     {
         die(__METHOD__); // Toon de Controller Action-methode.
@@ -48,17 +50,17 @@ class StudentController extends ControllerAbstract
      */
     public function loginAction()
     {
-        if (isset($_POST) && isset($_POST['button-login']) ) {
-            $student = new Student($_POST, false, false);
+        if (isset($_POST) && isset($_POST['button-login'])) {
+            $student = new Student($_POST);
 
             try {
                 $studentMapper = new StudentMapper();
-                $studentMapper->hashCredentials($student);
+                $studentMapper->setCredentials($student);
                 $student = $studentMapper->readAuthenticate($student);
             } catch (\ErrorException $e) {
-                die ($e->getMessage() );
+                die($e->getMessage());
             } catch (\Exception $e) {
-                die ($e->getMessage() );
+                die($e->getMessage());
             }
 
             if ($student->getId() !== null) {
@@ -75,16 +77,16 @@ class StudentController extends ControllerAbstract
      */
     public function registerAction()
     {
-        if (isset($_POST) && isset($_POST['button-register']) ) {
-            $student = new Student($_POST);
+        if (isset($_POST) && isset($_POST['button-register'])) {
+            $student = new Student($_POST, true); // Ook salt genereren.
 
             try {
                 $studentMapper = new StudentMapper();
                 $studentMapper->create($student);
             } catch (\ErrorException $e) {
-                die ($e->getMessage() );
+                die($e->getMessage());
             } catch (\Exception $e) {
-                die ($e->getMessage() );
+                die($e->getMessage());
             }
 
             if ($student->getId() !== null) {
@@ -102,6 +104,7 @@ class StudentController extends ControllerAbstract
     {
         $this->session->destroy();
 
-		$this->redirect(PATH_WEBROOT);
+        $this->redirect(PATH_WEBROOT);
     }
+
 }

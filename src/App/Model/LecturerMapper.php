@@ -32,6 +32,7 @@
 
 namespace App\Model;
 
+use Ahs\Error;
 use Ahs\ModelMapperAbstract;
 
 class LecturerMapper extends ModelMapperAbstract
@@ -64,9 +65,9 @@ class LecturerMapper extends ModelMapperAbstract
 
                 return $lecturer;
             }
-            throw new \Exception('Could not create `lecturer`');
+            throw new \Exception(sprintf(Error::MESSAGE_CREATE, get_class($lecturer) ) );
         }
-        throw new \ErrorException('Unexpected error');
+        throw new \ErrorException(Error::MESSAGE_UNEXPECTED);
     }
 
     /**
@@ -93,12 +94,13 @@ class LecturerMapper extends ModelMapperAbstract
 
             // Voer het prepared statement uit.
             if ($stmt->execute() ) {
-                $row = $stmt->fetch();
-
-                return new Lecturer($row);
+                if ($row = $stmt->fetch() ) {
+                    return new Lecturer($row);
+                }
             }
-            throw new \Exception('Could not read `lecturer`');
+            throw new \Exception(sprintf(Error::MESSAGE_READ, get_class($lecturer) ) );
         }
+        throw new \Exception(Error::MESSAGE_UNEXPECTED);
     }
 
     /**
@@ -117,9 +119,10 @@ class LecturerMapper extends ModelMapperAbstract
 
         $lecturers = [];
 
-        $res = $this->db->query($sql);
-        while ($row = $res->fetch()) {
-            $lecturers[] = new Lecturer($row);
+        if ($res = $this->db->query($sql)) {
+            while ($row = $res->fetch()) {
+                $lecturers[] = new Lecturer($row);
+            }
         }
 
         return $lecturers;
@@ -141,22 +144,20 @@ class LecturerMapper extends ModelMapperAbstract
              . 'WHERE `crs_id` = :course '
              . 'ORDER BY `familyname` ASC, `givenname` ASC';
 
+        $lecturers = [];
 
         $stmt = $this->db->prepare($sql);
         if ($stmt) {
             // Bind de waarden van de variabelen aan het prepared statement.
             $stmt->bindValue(':course', $course->getId() ); // Waarde op dit moment binden.
 
-            $lecturers = [];
             if ($stmt->execute() ) {
                 while ($row = $stmt->fetch()) {
                     $lecturers[] = new Lecturer($row);
                 }
             }
-
-            return $lecturers;
         }
 
-        return [];
+        return $lecturers;
     }
 }

@@ -32,47 +32,18 @@
 
 namespace Ahs;
 
-class Utility
+class Error
 {
-    /**
-     * Bereken een hash-code voor een karakterstring op basis van de HMAC-methode.
-     * Indien geen $algo opgegeven wordt, dan wordt de SHA-512 (512-bits Secure
-     * Hash Algorithm 2) gebruikt om een hash-code met 128 tekens te genereren.
-     *
-     * @static
-     * @param string $data Te hashen gegevens.
-     * @param string $algo Gebruikt algoritme, bijvoorbeeld 'sha512'.
-     * @param string $salt Salt die gebruikt wordt bij het encrypteren.
-     * @param int    $iterations Aantal keer dat het hash-algoritme uitgevoerd wordt.
-     * @param bool   $timed
-     * @return string
-     */
-    public static function hash($data, $algo = 'sha512', $salt = '', $iterations = 5000, $timed = false)
-    {
-        while (0 < $iterations--) {
-            if ($timed) {
-                // Zie: http://www.php.net/manual/en/function.microtime.php
-                $salt .= microtime();
-            }
-            // Zie: http://www.php.net/manual/en/function.hash-hmac.php
-            $data = hash_hmac($algo, $data, $salt); // Hash-based Message Authentication Code
-        }
+    const MESSAGE_CREATE            = 'Kan %s niet aanmaken in tabel';
 
-        return $data;
-    }
+    const MESSAGE_READ              = 'Kan %s niet ophalen uit tabel';
+    const MESSAGE_READ_AUTHENTICATE = 'Kan %s niet authenticeren';
+    const MESSAGE_READ_CREDENTIALS  = 'Kan de credentials voor %s ophalen uit tabel';
+    const MESSAGE_READ_VERIFY       = 'Kan de credentials voor %s niet verifiëren';
 
-    /**
-     * Bereken eenmalige een unieke hash-code met 64 tekens.
-     *
-     * @param string $data Te hashen gegevens.
-     * @param string $algo Gebruikt algoritme, bijvoorbeeld 'sha256'.
-     * @param string $salt
-     * @param int $iterations
-     * @param bool $timed
-     * @return string
-     */
-    public static function salt($data, $algo = 'sha256', $salt = '', $iterations = 5000, $timed = true)
-    {
-        return self::hash($data, $algo, $salt, $iterations, $timed);
-    }
+    const MESSAGE_UPDATE            = 'Kan %s niet updaten in tabel';
+
+    const MESSAGE_DELETE            = 'Kan %s niet verwijderen uit tabel';
+
+    const MESSAGE_UNEXPECTED        = 'Onverwachte fout';
 }

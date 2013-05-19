@@ -32,93 +32,85 @@
 
 namespace Ahs;
 
-class ViewRest
+class Security
 {
-    /**
-     * @var int
-     */
-    protected $responseCode = http::STATUS_CODE_OK;
+
+    const ALGO_SHA512   = '6';  // Veilig genoeg (86 tekens)
+    const ALGO_BLOWFISH = '2y'; // Veiliger (PHP 5.3.7+, 32 tekens)
+    const BASE64 = '0123456789./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
     /**
-     * @var string
+     * Bereken een hash-code voor een karakterstring met crypt().
+     *
+     * @param string $str  Te hashen karakterstring.
+     * @param string $salt Te gebruiken salt om een unieke hash-code te berekenen.
+     * @param string $algo Te gebruiken algoritme.
+     * @param int    $cost Aantal keer dat het hash-algoritme uitgevoerd wordt.
+     * @return string
      */
-    protected $contentType = http::CONTENT_TYPE_HTML;
-
-    /**
-     * @var mixed
-     */
-    protected $body = null;
-
-    public function __destruct()
+    public static function hash($str = '', $salt = '', $algo = self::ALGO_BLOWFISH, $cost = 5000)
     {
-        http_response_code($this->responseCode);
-        header("Content-Type: {$this->contentType}, charset=utf-8");
-        switch ($this->contentType) {
-            case http::CONTENT_TYPE_JSON:
-                echo json_encode($this->body);
-                break;
-            default:
-                if ($this->body) {
-                    echo $this->body;
+        switch ($algo) {
+            case self::ALGO_SHA512:
+                if (!(is_int($cost) && 1000 <= $cost && $cost <= 999999)) {
+                    $cost = 5000;
                 }
+                $salt = '$' . $algo . '$rounds=' . $cost . '$' . $salt;
+                $length = 86;
                 break;
-        }
-    }
-
-    /**
-     * Zet HTTP Response Status Code.
-     *
-     * @param int $responseCode
-     * @return \Ahs\ViewRest
-     */
-    public function setResponseCode($responseCode)
-    {
-        switch ($responseCode) {
-            case Http::STATUS_CODE_OK:
-            case Http::STATUS_CODE_CREATED:
-            case Http::STATUS_CODE_ACCEPTED:
-            case Http::STATUS_CODE_NO_CONTENT:
-            case Http::STATUS_CODE_NOT_IMPLEMENTED:
-                $this->responseCode = $responseCode;
-                break;
+            case self::ALGO_BLOWFISH:
             default:
-                $this->responseCode = Http::STATUS_CODE_OK;
+                if (!(is_int($cost) && 4 <= $cost && $cost <= 31)) {
+                    $cost = 7;
+                }
+                $salt = '$' . self::ALGO_BLOWFISH . '$' . sprintf('%02d', $cost) . '$' . $salt;
+                $length = 32;
                 break;
         }
 
-        return $this; // Maakt deze methode 'chainable'
+        $hash = crypt($str, $salt);
+        return substr($hash, -$length);
     }
 
     /**
-     * Zet HTTP Content-Type.
+     * Genereer een random salt voor een bepaald algoritme.
      *
-     * @param string $contentType
-     * @return \Ahs\ViewRest
+     * @param string $algo Te gebruiken algoritme.
+     * @return string
      */
-    public function setContentType($contentType)
+    public static function generateSalt($algo = self::ALGO_BLOWFISH)
     {
-        switch ($contentType) {
-            case Http::CONTENT_TYPE_JSON:
-                $this->contentType = $contentType;
+        switch ($algo) {
+            case self::ALGO_SHA512:
+                $length = 16; // Salt is maximaal 16 tekens.
                 break;
+            case self::ALGO_BLOWFISH:
             default:
-                $this->contentType = Http::CONTENT_TYPE_HTML;
+                $length = 22; // Salt is maximaal 22 tekens.
                 break;
         }
 
-        return $this; // Maakt deze methode 'chainable'
+        $max = strlen(self::BASE64) - 1;
+
+        $salt = '';
+        while (0 < $length--) {
+            $salt .= substr(self::BASE64, mt_rand(0, $max), 1);
+        }
+        return $salt;
     }
 
     /**
-     * Zet de body content.
+     * Bereken een unieke hash-code.
      *
-     * @param mixed $body
-     * @return \Ahs\ViewRest
+     * @param string $data Te hashen gegevens.
+     * @param string $salt Te gebruiken salt.
+     * @param string $algo Te gebruiken algoritme.
+     * @param int $cost
+     * @return string
      */
-    public function setBody($body = null)
+    public static function password($data = '', $salt = '', $algo = self::ALGO_BLOWFISH, $cost = 5000)
     {
-        $this->body = $body;
-
-        return $this; // Maakt deze methode 'chainable'
+        return self::hash($data, $algo, $salt, $cost);
     }
+
 }

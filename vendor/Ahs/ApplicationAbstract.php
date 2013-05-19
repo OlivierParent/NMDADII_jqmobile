@@ -34,7 +34,7 @@ namespace Ahs;
 
 abstract class ApplicationAbstract
 {
-    const VERSION = '0.2.1.20130424';
+    const VERSION = '0.3.0.20130506';
 
     const DIRECTORY_APP           = 'App';
     const DIRECTORY_CONTROLLER    = 'Controller';
